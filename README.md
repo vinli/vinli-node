@@ -1,6 +1,9 @@
 Vinli Node.js SDK
 =================
 
+[![Build Status](https://travis-ci.org/vinli/vinli-node.svg)](https://travis-ci.org/vinli/vinli-node)
+
+
 > This SDK and accompanying documentation is a work in progress. There are areas that are still to be completed and finalized. We welcome your feedback. Please post any errors as issues on GitHub and Vinli engineering will respond as quickly as possible. And stay tuned for updates over the next few weeks as we bring more features to the SDK.
 
 A Node.js client for interacting with the Vinli Platform from within your application.
