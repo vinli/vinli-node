@@ -110,7 +110,7 @@ describe('Rule', function(){
 
     it('should fetch the rule state from the platform', function(){
       var m = nock('https://events.vin.li')
-        .get('/api/v1/rules/fc8bdd0c-5be3-46d5-8582-b5b54052eca2/devices/270795d3-1945-4728-ad7c-47247487dcda/state')
+        .get('/api/v1/devices/270795d3-1945-4728-ad7c-47247487dcda/rules/fc8bdd0c-5be3-46d5-8582-b5b54052eca2/state')
         .reply(200, {
           'state': {
             'rule': 'fc8bdd0c-5be3-46d5-8582-b5b54052eca2',
@@ -124,9 +124,8 @@ describe('Rule', function(){
         .currentState(Vinli.Device.forge('270795d3-1945-4728-ad7c-47247487dcda'))
         .then(function(state){
           expect(state).to.be.an('object');
-          expect(state).to.have.property('state').that.is.an('object');
-          expect(state.state).to.have.property('evaluated', true);
-          expect(state.state).to.have.property('covered', false);
+          expect(state).to.have.property('evaluated', true);
+          expect(state).to.have.property('covered', false);
 
           m.done();
         });
