@@ -1,6 +1,7 @@
 Vinli Node.js SDK
 =================
 
+[![npm version](https://badge.fury.io/js/vinli.svg)](http://badge.fury.io/js/vinli)
 [![Build Status](https://travis-ci.org/vinli/vinli-node.svg)](https://travis-ci.org/vinli/vinli-node)
 
 
