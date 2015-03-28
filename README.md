@@ -17,7 +17,7 @@ Create a new application from the Vinli Developer Portal (https://dev.vin.li).  
 
 ```javascript
 var Vinli = require('vinli')({
-  appId: 'b3fcb3c2-0b7e-4c9a-a6a1-f53e365c2fd9'
+  appId: 'b3fcb3c2-0b7e-4c9a-a6a1-f53e365c2fd9',
   secretKey: 'C023z8T6f39WSZrLSqqf'
 });
 ```
