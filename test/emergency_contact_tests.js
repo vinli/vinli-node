@@ -56,7 +56,7 @@ describe('EmergencyContact', function(){
         .get('/api/v1/emergency_contacts/c4627b29-14bd-49c3-8e6a-1f857143039f')
         .reply(404, {message: 'Not found'});
 
-      expect(Vinli.EmergencyContact.fetch('c4627b29-14bd-49c3-8e6a-1f857143039f')).to.be.rejectedWith('Not Found');
+      expect(Vinli.EmergencyContact.fetch('c4627b29-14bd-49c3-8e6a-1f857143039f')).to.be.rejectedWith(/Not found/);
     });
   });
 

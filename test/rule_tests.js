@@ -52,13 +52,6 @@ describe('Rule', function(){
                 'radius' : 500
               }
             ],
-            'device' : '602c6490-d7a3-11e3-9c1a-0800200c9a66',
-            'notificationUrl' : 'https://www.myapp.com/vinli_events?internalRuleId=1314',
-            'notificationMetadata' : {
-              'userFirstName': 'John',
-              'userLastName': 'Sample',
-              'smsPhoneNumber': '2145551212'
-            },
             'links' : {
               'self' : 'https://events.vin.li/api/v1/rules/68d489c0-d7a2-11e3-9c1a-0800200c9a66',
               'events' : 'https://events.vin.li/api/v1/rules/68d489c0-d7a2-11e3-9c1a-0800200c9a66/events'
@@ -79,7 +72,7 @@ describe('Rule', function(){
         .get('/api/v1/rules/c4627b29-14bd-49c3-8e6a-1f857143039f')
         .reply(404, {message: 'Not found'});
 
-      expect(Vinli.Rule.fetch('c4627b29-14bd-49c3-8e6a-1f857143039f')).to.be.rejectedWith('Not Found');
+      expect(Vinli.Rule.fetch('c4627b29-14bd-49c3-8e6a-1f857143039f')).to.be.rejectedWith(/Not found/);
     });
   });
 
@@ -90,10 +83,20 @@ describe('Rule', function(){
     });
   });
 
-  xdescribe('#delete()', function(){
+  describe('#delete()', function(){
     it('should exist', function(){
       var rule = Vinli.Rule.forge('fc8bdd0c-5be3-46d5-8582-b5b54052eca2');
       expect(rule).to.have.property('delete').that.is.a('function');
+    });
+
+    it('should delete the rule', function(){
+      var m = nock('https://events.vin.li')
+        .delete('/api/v1/rules/fc8bdd0c-5be3-46d5-8582-b5b54052eca2')
+        .reply(204);
+
+      return Vinli.Rule.forge('fc8bdd0c-5be3-46d5-8582-b5b54052eca2').delete().then(function(){
+        m.done();
+      });
     });
   });
 

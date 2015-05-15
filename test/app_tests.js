@@ -7,30 +7,30 @@ var Vinli;
 chai.use(chaiAsPromised);
 var expect = chai.expect;
 
-describe('App', function(){
-  before(function(){
-    Vinli = require('..')({appId: 'foo', secretKey: 'bar'});
+describe('App', function() {
+  before(function() {
+    Vinli = require('..')({ appId: 'foo', secretKey: 'bar' });
   });
 
-  beforeEach(function(){
+  beforeEach(function() {
     nock.disableNetConnect();
   });
 
-  afterEach(function(){
+  afterEach(function() {
     nock.cleanAll();
   });
 
-  describe('.devices()', function(){
-    it('should exist', function(){
+  describe('.devices()', function() {
+    it('should exist', function() {
       expect(Vinli.App).to.have.property('devices').that.is.a('function');
     });
 
-    it('should return a "next page" function', function(){
+    it('should return a "next page" function', function() {
       var m = nock('https://platform.vin.li')
         .get('/api/v1/devices?offset=0&limit=2').reply('200', {
           devices: [{
             id: '2248fff4-34fd-469c-9be7-8a1b5b13b4c7'
-          },{
+          }, {
             id: 'f20c8c54-bc48-49f7-ae98-ba756efdce71'
           }],
           meta: {
@@ -66,7 +66,7 @@ describe('App', function(){
           }
         });
 
-      return Vinli.App.devices({limit: 2}).then(function(devices){
+      return Vinli.App.devices({limit: 2}).then(function(devices) {
         expect(devices).to.have.property('list');
         expect(devices).to.have.property('total', 3);
         expect(devices).to.have.property('next').that.is.a('function');
@@ -85,12 +85,12 @@ describe('App', function(){
     });
   });
 
-  describe('.addDevice()', function(){
-    it('should exist', function(){
+  describe('.addDevice()', function() {
+    it('should exist', function() {
       expect(Vinli.App).to.have.property('addDevice').that.is.a('function');
     });
 
-    it('should let you add a device by device id', function(){
+    it('should let you add a device by device id', function() {
       var m = nock('https://platform.vin.li')
         .post('/api/v1/devices', {
           device: {
@@ -101,14 +101,14 @@ describe('App', function(){
             id: 'foo'
           }
         });
-      return Vinli.App.addDevice({id: 'foo'}).then(function(device){
+      return Vinli.App.addDevice({ id: 'foo' }).then(function(device) {
         expect(device).to.be.an.instanceOf(Vinli.Device);
         expect(device).to.have.property('id', 'foo');
         m.done();
       });
     });
 
-    it('should let you add a device by case id', function(){
+    it('should let you add a device by case id', function() {
       var m = nock('https://platform.vin.li')
         .post('/api/v1/devices', {
           device: {
@@ -119,16 +119,22 @@ describe('App', function(){
             id: 'foo'
           }
         });
-      return Vinli.App.addDevice({caseId: 'VNL999'}).then(function(device){
+      return Vinli.App.addDevice({caseId: 'VNL999'}).then(function(device) {
         expect(device).to.be.an.instanceOf(Vinli.Device);
         expect(device).to.have.property('id', 'foo');
         m.done();
       });
     });
 
-    it('should not let you add a device by device id and case id', function(){
-      expect(function(){
-        Vinli.App.addDevice({id: 'foo', caseId: 'VNL999'});
+    it('should not let you add a device by device id and case id', function() {
+      expect(function() {
+        Vinli.App.addDevice({ id: 'foo', caseId: 'VNL999' });
+      }).to.throw(/id, caseId/);
+    });
+
+    it('should not let you add a device without device id or case id', function() {
+      expect(function() {
+        Vinli.App.addDevice({ id: 'foo', caseId: 'VNL999' });
       }).to.throw(/id, caseId/);
     });
   });

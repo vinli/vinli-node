@@ -8,25 +8,25 @@
     "url": "https://github.com/vinli/vinli-node"
   },
   "scripts": {
-    "test": "node_modules/.bin/mocha --recursive -R spec",
-    "coverage": "node_modules/.bin/istanbul cover node_modules/.bin/_mocha -- --recursive --reporter list"
+    "test": "mocha --recursive -R spec",
+    "coverage": "istanbul cover node_modules/.bin/_mocha -- --recursive --reporter list"
   },
   "author": "Powell Kinney",
   "license": "MIT",
   "dependencies": {
     "extend": "~2.0.0",
-    "hoek": "~2.9.0",
-    "joi": "^4.8.1",
-    "q": "~1.1.1",
-    "request": "~2.48.0",
-    "yarp": "^0.1.1"
+    "hoek": "~2.12.0",
+    "joi": "^6.0.8",
+    "q": "~1.2.0",
+    "request": "~2.54.0",
+    "yarp": "^0.3.0"
   },
   "devDependencies": {
-    "chai": "~1.10.0",
-    "chai-as-promised": "~4.1.1",
-    "istanbul": "^0.3.4",
-    "mocha": "~2.0.1",
-    "nock": "~0.51.0"
+    "chai": "~2.2.0",
+    "chai-as-promised": "~4.3.0",
+    "istanbul": "^0.3.11",
+    "mocha": "~2.2.1",
+    "nock": "~1.3.0"
   },
   "bugs": {
     "url": "https://github.com/vinli/vinli-node/issues"

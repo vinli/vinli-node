@@ -1,97 +1,97 @@
 var nock = require('nock');
 var expect = require('./helpers/test_helper');
 
-var Vinli = require('..')({appId: 'foo', secretKey: 'bar'});
+var Vinli = require('..')({appId: 'foo', secretKey: 'bar' });
 
-describe('Device', function(){
-  before(function(){
-    Vinli = require('..')({appId: 'foo', secretKey: 'bar'});
+describe('Device', function() {
+  before(function() {
+    Vinli = require('..')({appId: 'foo', secretKey: 'bar' });
   });
 
-  beforeEach(function(){
+  beforeEach(function() {
     nock.disableNetConnect();
   });
 
-  afterEach(function(){
+  afterEach(function() {
     nock.cleanAll();
   });
 
-  describe('.forge()', function(){
-    it('should exist', function(){
+  describe('.forge()', function() {
+    it('should exist', function() {
       expect(Vinli.Device).to.have.property('fetch').that.is.a('function');
     });
 
-    it('should return a device with the given id', function(){
+    it('should return a device with the given id', function() {
       var device = Vinli.Device.forge('c4627b29-14bd-49c3-8e6a-1f857143039f');
       expect(device).to.have.property('id', 'c4627b29-14bd-49c3-8e6a-1f857143039f');
     });
   });
 
-  describe('.fetch()', function(){
-    it('should exist', function(){
+  describe('.fetch()', function() {
+    it('should exist', function() {
       expect(Vinli.Device).to.have.property('forge').that.is.a('function');
     });
 
-    it('should fetch a device with the given id from the platform', function(){
+    it('should fetch a device with the given id from the platform', function() {
       var deviceNock = nock('https://platform.vin.li')
         .get('/api/v1/devices/c4627b29-14bd-49c3-8e6a-1f857143039f')
-        .reply(200, {device: {id: 'c4627b29-14bd-49c3-8e6a-1f857143039f', chipId: 'AF3242dsfeD'}});
+        .reply(200, { device: { id: 'c4627b29-14bd-49c3-8e6a-1f857143039f', chipId: 'AF3242dsfeD' } });
 
-      return Vinli.Device.fetch('c4627b29-14bd-49c3-8e6a-1f857143039f').then(function(device){
+      return Vinli.Device.fetch('c4627b29-14bd-49c3-8e6a-1f857143039f').then(function(device) {
         expect(device).to.have.property('id', 'c4627b29-14bd-49c3-8e6a-1f857143039f');
         expect(device).to.have.property('chipId', 'AF3242dsfeD');
         deviceNock.done();
       });
     });
 
-    it('should reject a request for an unknown device', function(){
+    it('should reject a request for an unknown device', function() {
       nock('https://platform.vin.li')
         .get('/api/v1/devices/c4627b29-14bd-49c3-8e6a-1f857143039f')
-        .reply(404, {message: 'Not found'});
+        .reply(404, { message: 'Not found' });
 
-      expect(Vinli.Device.fetch('c4627b29-14bd-49c3-8e6a-1f857143039f')).to.be.rejectedWith('Not Found');
+      expect(Vinli.Device.fetch('c4627b29-14bd-49c3-8e6a-1f857143039f')).to.be.rejectedWith(/Not found/);
     });
   });
 
-  describe('#vehicles()', function(){
-    it('should exist', function(){
+  describe('#vehicles()', function() {
+    it('should exist', function() {
       var device = Vinli.Device.forge('asfdafdasfdsdf');
       expect(device).to.have.property('vehicles').that.is.a('function');
     });
 
-    it('should return a list of vehicles', function(){
+    it('should return a list of vehicles', function() {
       var m = nock('https://platform.vin.li')
         .get('/api/v1/devices/c4627b29-14bd-49c3-8e6a-1f857143039f/vehicles?offset=0&limit=3')
         .reply(200, {
-          'meta': {
-            'pagination': {
-              'total': 4,
-              'limit': 3,
-              'offset': 0,
-              'links': {
-                'first': '/api/v1/devices/c4627b29-14bd-49c3-8e6a-1f857143039f/vehicles?limit=3&offset=0&sortDirection=desc',
-                'next': '/api/v1/devices/c4627b29-14bd-49c3-8e6a-1f857143039f/vehicles?limit=3&offset=3&sortDirection=desc',
-                'last': '/api/v1/devices/c4627b29-14bd-49c3-8e6a-1f857143039f/vehicles?limit=3&offset=3&sortDirection=desc'
+          meta: {
+            pagination: {
+              total: 4,
+              limit: 3,
+              offset: 0,
+              links: {
+                first: '/api/v1/devices/c4627b29-14bd-49c3-8e6a-1f857143039f/vehicles?limit=3&offset=0&sortDirection=desc',
+                next: '/api/v1/devices/c4627b29-14bd-49c3-8e6a-1f857143039f/vehicles?limit=3&offset=3&sortDirection=desc',
+                last: '/api/v1/devices/c4627b29-14bd-49c3-8e6a-1f857143039f/vehicles?limit=3&offset=3&sortDirection=desc'
               }
             }
           },
-          'vehicles': [{
-            'id': '530f2690-63c0-11e4-86d8-7f2f26e5461e',
-            'vin': '4T1BK46K57U571847',
-            'make': 'Toyota',
-            'model': 'Camry',
-            'year': '2007',
-            'trim': 'SE 4dr Sedan (3.5L 6cyl 6A)'
-          },{
-            'id': 'da2d2900-442c-11e4-8f53-f5189366402a',
-            'vin': '1G1JC5444R7556142',
-            'make': 'Chevrolet',
-            'model': 'Cavalier',
-            'year': '1994',
-            'trim': 'RS 4dr Sedan'
-          },{
-            'id': '0d7b4950-44f4-11e4-8f53-f5189366402a',
-            'vin': 'JM1BL1SF1A1168829'
+          vehicles: [{
+            id: '530f2690-63c0-11e4-86d8-7f2f26e5461e',
+            vin: '4T1BK46K57U571847',
+            make: 'Toyota',
+            model: 'Camry',
+            year: '2007',
+            trim: 'SE 4dr Sedan (3.5L 6cyl 6A)'
+          }, {
+            id: 'da2d2900-442c-11e4-8f53-f5189366402a',
+            vin: '1G1JC5444R7556142',
+            make: 'Chevrolet',
+            model: 'Cavalier',
+            year: '1994',
+            trim: 'RS 4dr Sedan'
+          }, {
+            id: '0d7b4950-44f4-11e4-8f53-f5189366402a',
+            vin: 'JM1BL1SF1A1168829'
           }]
         });
 
@@ -106,13 +106,13 @@ describe('Device', function(){
     });
   });
 
-  describe('#latestVehicle()', function(){
-    it('should exist', function(){
+  describe('#latestVehicle()', function() {
+    it('should exist', function() {
       var device = Vinli.Device.forge('asfdafdasfdsdf');
       expect(device).to.have.property('latestVehicle').that.is.a('function');
     });
 
-    it('should return a Vehicle object', function(){
+    it('should return a Vehicle object', function() {
       var m = nock('https://platform.vin.li')
         .get('/api/v1/devices/c4627b29-14bd-49c3-8e6a-1f857143039f/vehicles/_latest')
         .reply(200, {
@@ -136,7 +136,7 @@ describe('Device', function(){
       });
     });
 
-    it('should return null for a device that has not had a vehicle yet', function(){
+    it('should return null for a device that has not had a vehicle yet', function() {
       var m = nock('https://platform.vin.li')
         .get('/api/v1/devices/c4627b29-14bd-49c3-8e6a-1f857143039f/vehicles/_latest')
         .reply(200, {vehicle: null});
@@ -148,27 +148,27 @@ describe('Device', function(){
     });
   });
 
-  xdescribe('#startups()', function(){
-    it('should exist', function(){
+  xdescribe('#startups()', function() {
+    it('should exist', function() {
       var device = Vinli.Device.forge('asfdafdasfdsdf');
       expect(device).to.have.property('startups').that.is.a('function');
     });
   });
 
-  xdescribe('#shutdowns()', function(){
-    it('should exist', function(){
+  xdescribe('#shutdowns()', function() {
+    it('should exist', function() {
       var device = Vinli.Device.forge('asfdafdasfdsdf');
       expect(device).to.have.property('shutdowns').that.is.a('function');
     });
   });
 
-  describe('#messages()', function(){
-    it('should exist', function(){
+  describe('#messages()', function() {
+    it('should exist', function() {
       var device = Vinli.Device.forge('asfdafdasfdsdf');
       expect(device).to.have.property('messages').that.is.a('function');
     });
 
-    it('should return a list of messages', function(){
+    it('should return a list of messages', function() {
       var m = nock('https://telemetry.vin.li')
         .get('/api/v1/devices/c4627b29-14bd-49c3-8e6a-1f857143039f/messages?limit=3')
         .reply(200, {
@@ -233,7 +233,7 @@ describe('Device', function(){
       });
     });
 
-    it('should return a list of messages with a function to return the prior messages', function(){
+    it('should return a list of messages with a function to return the prior messages', function() {
       var m = nock('https://telemetry.vin.li')
         .get('/api/v1/devices/c4627b29-14bd-49c3-8e6a-1f857143039f/messages?limit=3&since=1416841043850')
         .reply(200, {
@@ -308,13 +308,13 @@ describe('Device', function(){
     });
   });
 
-  describe('#message()', function(){
-    it('should exist', function(){
+  describe('#message()', function() {
+    it('should exist', function() {
       var device = Vinli.Device.forge('asfdafdasfdsdf');
       expect(device).to.have.property('message').that.is.a('function');
     });
 
-    it('should return a single message', function(){
+    it('should return a single message', function() {
       var m = nock('https://telemetry.vin.li')
         .get('/api/v1/devices/c4627b29-14bd-49c3-8e6a-1f857143039f/messages/4993fac7-7e0b-4d90-9e57-af8eb1d27170')
         .reply(200, {
@@ -335,27 +335,27 @@ describe('Device', function(){
     });
   });
 
-  xdescribe('#snapshots()', function(){
-    it('should exist', function(){
+  xdescribe('#snapshots()', function() {
+    it('should exist', function() {
       var device = Vinli.Device.forge('asfdafdasfdsdf');
       expect(device).to.have.property('snapshots').that.is.a('function');
     });
   });
 
-  xdescribe('#locations()', function(){
-    it('should exist', function(){
+  xdescribe('#locations()', function() {
+    it('should exist', function() {
       var device = Vinli.Device.forge('asfdafdasfdsdf');
       expect(device).to.have.property('locations').that.is.a('function');
     });
   });
 
-  describe('#trips()', function(){
-    it('should exist', function(){
+  describe('#trips()', function() {
+    it('should exist', function() {
       var device = Vinli.Device.forge('asfdafdasfdsdf');
       expect(device).to.have.property('trips').that.is.a('function');
     });
 
-    it('should return a list of trips for the device', function(){
+    it('should return a list of trips for the device', function() {
       var m = nock('https://trips.vin.li/')
         .get('/api/v1/devices/c4627b29-14bd-49c3-8e6a-1f857143039f/trips?offset=0&limit=2')
         .reply(200, {
@@ -394,40 +394,42 @@ describe('Device', function(){
         expect(trips.list[0]).to.be.instanceOf(Vinli.Trip);
         expect(trips).to.have.property('total', 748);
         expect(trips).to.have.property('next').that.is.a('function');
+
+        m.done();
       });
     });
   });
 
-  xdescribe('#rules()', function(){
-    it('should exist', function(){
+  xdescribe('#rules()', function() {
+    it('should exist', function() {
       var device = Vinli.Device.forge('asfdafdasfdsdf');
       expect(device).to.have.property('rules').that.is.a('function');
     });
   });
 
-  xdescribe('#createRule()', function(){
-    it('should exist', function(){
+  xdescribe('#createRule()', function() {
+    it('should exist', function() {
       var device = Vinli.Device.forge('asfdafdasfdsdf');
       expect(device).to.have.property('createRule').that.is.a('function');
     });
   });
 
-  xdescribe('#collisions()', function(){
-    it('should exist', function(){
+  xdescribe('#collisions()', function() {
+    it('should exist', function() {
       var device = Vinli.Device.forge('asfdafdasfdsdf');
       expect(device).to.have.property('collisions').that.is.a('function');
     });
   });
 
-  describe('#emergencyContacts()', function(){
-    it('should exist', function(){
+  describe('#emergencyContacts()', function() {
+    it('should exist', function() {
       var device = Vinli.Device.forge('asfdafdasfdsdf');
       expect(device).to.have.property('emergencyContacts').that.is.a('function');
     });
   });
 
-  describe('#createEmergencyContact()', function(){
-    it('should exist', function(){
+  describe('#createEmergencyContact()', function() {
+    it('should exist', function() {
       var device = Vinli.Device.forge('asfdafdasfdsdf');
       expect(device).to.have.property('createEmergencyContact').that.is.a('function');
     });

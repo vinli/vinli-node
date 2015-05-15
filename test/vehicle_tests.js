@@ -62,14 +62,58 @@ describe('Vehicle', function(){
         .get('/api/v1/vehicles/c4627b29-14bd-49c3-8e6a-1f857143039f')
         .reply(404, {message: 'Not found'});
 
-      expect(Vinli.Vehicle.fetch('c4627b29-14bd-49c3-8e6a-1f857143039f')).to.be.rejectedWith('Not Found');
+      expect(Vinli.Vehicle.fetch('c4627b29-14bd-49c3-8e6a-1f857143039f')).to.be.rejectedWith(/Not found/);
     });
   });
 
   describe('#trips()', function(){
     it('should exist', function(){
-      var device = Vinli.Vehicle.forge('asfdafdasfdsdf');
+      var device = Vinli.Device.forge('asfdafdasfdsdf');
       expect(device).to.have.property('trips').that.is.a('function');
+    });
+
+    it('should return a list of trips for the device', function(){
+      var m = nock('https://trips.vin.li/')
+        .get('/api/v1/vehicles/530f2690-63c0-11e4-86d8-7f2f26e5461e/trips?offset=0&limit=2')
+        .reply(200, {
+          'trips': [{
+            'id': 'cf9173fa-bbca-49bb-8297-a1a18586a8e7',
+            'start': '2014-12-30T08:50:48.669Z',
+            'stop': '2014-12-30T14:57:46.225Z',
+            'status': 'complete',
+            'vehicleId': '530f2690-63c0-11e4-86d8-7f2f26e5461e',
+            'deviceId': 'c4627b29-14bd-49c3-8e6a-1f857143039f'
+          },{
+            'id': '4cb2a8ea-64a5-49b9-bdb2-e60106f61f84',
+            'start': '2014-12-29T13:35:52.184Z',
+            'stop': '2014-12-29T13:58:32.270Z',
+            'status': 'complete',
+            'vehicleId': '530f2690-63c0-11e4-86d8-7f2f26e5461e',
+            'deviceId': 'c4627b29-14bd-49c3-8e6a-1f857143039f'
+          }],
+            'meta': {
+            'pagination': {
+              'total': 748,
+              'limit': 2,
+              'offset': 0,
+              'links': {
+                'first': 'http://trips-test.vin.li/api/v1/devices/c4627b29-14bd-49c3-8e6a-1f857143039f/trips?offset=0&limit=2',
+                'last': 'http://trips-test.vin.li/api/v1/devices/c4627b29-14bd-49c3-8e6a-1f857143039f/trips?offset=746&limit=2',
+                'next': 'http://trips-test.vin.li/api/v1/devices/c4627b29-14bd-49c3-8e6a-1f857143039f/trips?offset=2&limit=2'
+              }
+            }
+          }
+        });
+
+      return Vinli.Vehicle.forge('530f2690-63c0-11e4-86d8-7f2f26e5461e').trips({limit: 2}).then(function(trips){
+        expect(trips).to.have.property('list').that.is.an('array');
+        expect(trips.list).to.have.lengthOf(2);
+        expect(trips.list[0]).to.be.instanceOf(Vinli.Trip);
+        expect(trips).to.have.property('total', 748);
+        expect(trips).to.have.property('next').that.is.a('function');
+
+        m.done();
+      });
     });
   });
 

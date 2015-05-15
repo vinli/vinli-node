@@ -7,21 +7,21 @@ var Vinli;
 chai.use(chaiAsPromised);
 var expect = chai.expect;
 
-describe('Auth', function(){
-  before(function(){
-    Vinli = require('..')({appId: 'foo', secretKey: 'bar'});
+describe('Auth', function() {
+  before(function() {
+    Vinli = require('..')({ appId: 'foo', secretKey: 'bar' });
   });
 
-  beforeEach(function(){
+  beforeEach(function() {
     nock.disableNetConnect();
   });
 
-  afterEach(function(){
+  afterEach(function() {
     nock.cleanAll();
   });
 
-  describe('.exchange()', function(){
-    it('should exist', function(){
+  describe('.exchange()', function() {
+    it('should exist', function() {
       expect(Vinli.Auth).to.have.property('exchange').that.is.a('function');
     });
 
