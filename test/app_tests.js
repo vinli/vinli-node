@@ -9,7 +9,7 @@ var expect = chai.expect;
 
 describe('App', function() {
   before(function() {
-    Vinli = new (require('..'))({appId: 'foo', secretKey: 'bar' });
+    Vinli = new (require('..'))({ appId: 'foo', secretKey: 'bar' });
   });
 
   beforeEach(function() {
@@ -119,7 +119,7 @@ describe('App', function() {
             id: 'foo'
           }
         });
-      return Vinli.App.addDevice({caseId: 'VNL999'}).then(function(device) {
+      return Vinli.App.addDevice({ caseId: 'VNL999' }).then(function(device) {
         expect(device).to.be.an.instanceOf(Vinli.Device);
         expect(device).to.have.property('id', 'foo');
         m.done();

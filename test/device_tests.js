@@ -1,11 +1,11 @@
 var nock = require('nock');
 var expect = require('./helpers/test_helper');
 
-var Vinli = require('..')({appId: 'foo', secretKey: 'bar' });
+var Vinli;
 
 describe('Device', function() {
   before(function() {
-    Vinli = new (require('..'))({appId: 'foo', secretKey: 'bar' });
+    Vinli = new (require('..'))({ appId: 'foo', secretKey: 'bar' });
   });
 
   beforeEach(function() {
@@ -95,7 +95,7 @@ describe('Device', function() {
           }]
         });
 
-      return Vinli.Device.forge('c4627b29-14bd-49c3-8e6a-1f857143039f').vehicles({limit: 3}).then(function(vehicles){
+      return Vinli.Device.forge('c4627b29-14bd-49c3-8e6a-1f857143039f').vehicles({ limit: 3 }).then(function(vehicles) {
         expect(vehicles).to.have.property('list').that.is.an('array');
         expect(vehicles.list).to.have.lengthOf(3);
         expect(vehicles.list[0]).to.be.instanceOf(Vinli.Vehicle);
@@ -116,20 +116,20 @@ describe('Device', function() {
       var m = nock('https://platform.vin.li')
         .get('/api/v1/devices/c4627b29-14bd-49c3-8e6a-1f857143039f/vehicles/_latest')
         .reply(200, {
-          'vehicle': {
-            'id': 'fc8bdd0c-5be3-46d5-8582-b5b54052eca2',
-            'vin': '4T1BK46K57U123456',
-            'make': 'Toyota',
-            'model': 'Camry',
-            'year': '2007',
-            'trim': 'SE 4dr Sedan (3.5L 6cyl 6A)',
-            'links': {
-              'self': '/api/v1/vehicles/fc8bdd0c-5be3-46d5-8582-b5b54052eca2'
+          vehicle: {
+            id: 'fc8bdd0c-5be3-46d5-8582-b5b54052eca2',
+            vin: '4T1BK46K57U123456',
+            make: 'Toyota',
+            model: 'Camry',
+            year: '2007',
+            trim: 'SE 4dr Sedan (3.5L 6cyl 6A)',
+            links: {
+              self: '/api/v1/vehicles/fc8bdd0c-5be3-46d5-8582-b5b54052eca2'
             }
           }
         });
 
-      return Vinli.Device.forge('c4627b29-14bd-49c3-8e6a-1f857143039f').latestVehicle().then(function(vehicle){
+      return Vinli.Device.forge('c4627b29-14bd-49c3-8e6a-1f857143039f').latestVehicle().then(function(vehicle) {
         expect(vehicle).to.be.an.instanceOf(Vinli.Vehicle);
         expect(vehicle).to.have.property('vin', '4T1BK46K57U123456');
         m.done();
@@ -139,9 +139,9 @@ describe('Device', function() {
     it('should return null for a device that has not had a vehicle yet', function() {
       var m = nock('https://platform.vin.li')
         .get('/api/v1/devices/c4627b29-14bd-49c3-8e6a-1f857143039f/vehicles/_latest')
-        .reply(200, {vehicle: null});
+        .reply(200, { vehicle: null });
 
-      return Vinli.Device.forge('c4627b29-14bd-49c3-8e6a-1f857143039f').latestVehicle().then(function(vehicle){
+      return Vinli.Device.forge('c4627b29-14bd-49c3-8e6a-1f857143039f').latestVehicle().then(function(vehicle) {
         expect(vehicle).to.equal(null);
         m.done();
       });
@@ -172,60 +172,60 @@ describe('Device', function() {
       var m = nock('https://telemetry.vin.li')
         .get('/api/v1/devices/c4627b29-14bd-49c3-8e6a-1f857143039f/messages?limit=3')
         .reply(200, {
-          'messages': [{
-            'id': '4993fac7-7e0b-4d90-9e57-af8eb1d27170',
-            'timestamp': 1416841046851,
-            'location': {
-                'type': 'point',
-                'coordinates': [
+        messages: [{
+          id: '4993fac7-7e0b-4d90-9e57-af8eb1d27170',
+          timestamp: 1416841046851,
+          location: {
+              type: 'point',
+              coordinates: [
                     -96.79064822,
                     32.78053848
                 ]
             },
-            'calculatedLoadValue': 31.372549019607842,
-            'vehicleSpeed': 3,
-            'rpm': 672.5
+          calculatedLoadValue: 31.372549019607842,
+          vehicleSpeed: 3,
+          rpm: 672.5
           }, {
-            'id': '26f7b270-e98d-4c7e-adab-907f4c2ea6e4',
-            'timestamp': 1416841045851,
-            'location': {
-                'type': 'point',
-                'coordinates': [
+          id: '26f7b270-e98d-4c7e-adab-907f4c2ea6e4',
+          timestamp: 1416841045851,
+          location: {
+              type: 'point',
+              coordinates: [
                     -96.79064822,
                     32.78053848
                 ]
             },
-            'calculatedLoadValue': 32.15686274509804,
-            'vehicleSpeed': 3,
-            'rpm': 767.75
+          calculatedLoadValue: 32.15686274509804,
+          vehicleSpeed: 3,
+          rpm: 767.75
           }, {
-            'id': '2d729a46-5830-481a-b600-f7c99e1861ae',
-            'timestamp': 1416841044852,
-            'location': {
-                'type': 'point',
-                'coordinates': [
+          id: '2d729a46-5830-481a-b600-f7c99e1861ae',
+          timestamp: 1416841044852,
+          location: {
+              type: 'point',
+              coordinates: [
                     -96.79065166,
                     32.78053986
                 ]
             },
-            'calculatedLoadValue': 36.07843137254902,
-            'vehicleSpeed': 4,
-            'rpm': 763.25
+          calculatedLoadValue: 36.07843137254902,
+          vehicleSpeed: 4,
+          rpm: 763.25
           }
         ],
-        'meta': {
-          'pagination': {
-            'remaining': 9715,
-            'limit': 3,
-            'until': 1419725719165,
-            'links': {
-              'prior': 'https://telemetry-test.vin.li/api/v1/devices/fe4bbc20-cc90-11e3-8e05-f3abac5b6410/messages?limit=3&until=1416841027851'
+      meta: {
+        pagination: {
+          remaining: 9715,
+          limit: 3,
+          until: 1419725719165,
+          links: {
+            prior: 'https://telemetry-test.vin.li/api/v1/devices/fe4bbc20-cc90-11e3-8e05-f3abac5b6410/messages?limit=3&until=1416841027851'
             }
           }
         }
       });
 
-      return Vinli.Device.forge('c4627b29-14bd-49c3-8e6a-1f857143039f').messages({limit: 3}).then(function(messages){
+      return Vinli.Device.forge('c4627b29-14bd-49c3-8e6a-1f857143039f').messages({ limit: 3 }).then(function(messages) {
         expect(messages).to.have.property('list').that.is.a('array').and.has.lengthOf(3);
         expect(messages).to.have.property('remaining', 9715);
         expect(messages).to.have.property('prior').that.is.a('function');
@@ -237,33 +237,33 @@ describe('Device', function() {
       var m = nock('https://telemetry.vin.li')
         .get('/api/v1/devices/c4627b29-14bd-49c3-8e6a-1f857143039f/messages?limit=3&since=1416841043850')
         .reply(200, {
-          'messages': [{
-            'id': '4993fac7-7e0b-4d90-9e57-af8eb1d27170',
-            'timestamp': 1416841046851,
-            'calculatedLoadValue': 31.372549019607842,
-            'vehicleSpeed': 3,
-            'rpm': 672.5
+          messages: [{
+            id: '4993fac7-7e0b-4d90-9e57-af8eb1d27170',
+            timestamp: 1416841046851,
+            calculatedLoadValue: 31.372549019607842,
+            vehicleSpeed: 3,
+            rpm: 672.5
           }, {
-            'id': '26f7b270-e98d-4c7e-adab-907f4c2ea6e4',
-            'timestamp': 1416841045851,
-            'calculatedLoadValue': 32.15686274509804,
-            'vehicleSpeed': 3,
-            'rpm': 767.75
+            id: '26f7b270-e98d-4c7e-adab-907f4c2ea6e4',
+            timestamp: 1416841045851,
+            calculatedLoadValue: 32.15686274509804,
+            vehicleSpeed: 3,
+            rpm: 767.75
           }, {
-            'id': '2d729a46-5830-481a-b600-f7c99e1861ae',
-            'timestamp': 1416841044852,
-            'calculatedLoadValue': 36.07843137254902,
-            'vehicleSpeed': 4,
-            'rpm': 763.25
+            id: '2d729a46-5830-481a-b600-f7c99e1861ae',
+            timestamp: 1416841044852,
+            calculatedLoadValue: 36.07843137254902,
+            vehicleSpeed: 4,
+            rpm: 763.25
           }],
-        'meta': {
-          'pagination': {
-            'remaining': 1,
-              'limit': 3,
-              'until': 1419731564093,
-              'since': 1416841043850,
-              'links': {
-                'prior': 'https://telemetry-test.vin.li/api/v1/devices/fe4bbc20-cc90-11e3-8e05-f3abac5b6410/messages?limit=3&since=1416841043850&until=1416841044851'
+        meta: {
+          pagination: {
+            remaining: 1,
+              limit: 3,
+              until: 1419731564093,
+              since: 1416841043850,
+              links: {
+                prior: 'https://telemetry-test.vin.li/api/v1/devices/fe4bbc20-cc90-11e3-8e05-f3abac5b6410/messages?limit=3&since=1416841043850&until=1416841044851'
               }
             }
           }
@@ -272,33 +272,33 @@ describe('Device', function() {
       var n = nock('https://telemetry.vin.li')
         .get('/api/v1/devices/c4627b29-14bd-49c3-8e6a-1f857143039f/messages?limit=3&since=1416841043850&until=1416841044851')
         .reply(200, {
-          'messages': [{
-            'id': 'ef32a83b-bf46-4266-a98d-a4736b83425e',
-            'timestamp': 1416841043852,
-            'calculatedLoadValue': 30.980392156862745,
-            'vehicleSpeed': 8,
-            'rpm': 698.25
+          messages: [{
+            id: 'ef32a83b-bf46-4266-a98d-a4736b83425e',
+            timestamp: 1416841043852,
+            calculatedLoadValue: 30.980392156862745,
+            vehicleSpeed: 8,
+            rpm: 698.25
           }],
-        'meta': {
-          'pagination': {
-            'remaining': 0,
-              'limit': 3,
-              'until': 1416841044851,
-              'since': 1416841043850,
-              'links': { }
+        meta: {
+          pagination: {
+            remaining: 0,
+              limit: 3,
+              until: 1416841044851,
+              since: 1416841043850,
+              links: { }
             }
           }
         });
 
-      return Vinli.Device.forge('c4627b29-14bd-49c3-8e6a-1f857143039f').messages({limit: 3, since: 1416841043850})
-        .then(function(messages){
+      return Vinli.Device.forge('c4627b29-14bd-49c3-8e6a-1f857143039f').messages({ limit: 3, since: 1416841043850 })
+        .then(function(messages) {
         expect(messages).to.have.property('list').that.is.a('array').and.has.lengthOf(3);
         expect(messages).to.have.property('remaining', 1);
         expect(messages).to.have.property('prior').that.is.a('function');
         m.done();
 
         return messages.prior();
-      }).then(function(messages){
+      }).then(function(messages) {
         expect(messages).to.have.property('list').that.is.a('array').and.has.lengthOf(1);
         expect(messages).to.have.property('remaining', 0);
         expect(messages).not.to.have.property('prior');
@@ -318,17 +318,17 @@ describe('Device', function() {
       var m = nock('https://telemetry.vin.li')
         .get('/api/v1/devices/c4627b29-14bd-49c3-8e6a-1f857143039f/messages/4993fac7-7e0b-4d90-9e57-af8eb1d27170')
         .reply(200, {
-          'message': {
-            'id': '4993fac7-7e0b-4d90-9e57-af8eb1d27170',
-            'timestamp': 1416841046851,
-            'calculatedLoadValue': 31.372549019607842,
-            'vehicleSpeed': 3,
-            'rpm': 672.5
+          message: {
+            id: '4993fac7-7e0b-4d90-9e57-af8eb1d27170',
+            timestamp: 1416841046851,
+            calculatedLoadValue: 31.372549019607842,
+            vehicleSpeed: 3,
+            rpm: 672.5
           }
         });
 
       return Vinli.Device.forge('c4627b29-14bd-49c3-8e6a-1f857143039f').message('4993fac7-7e0b-4d90-9e57-af8eb1d27170')
-        .then(function(message){
+        .then(function(message) {
         expect(message).to.have.property('id', '4993fac7-7e0b-4d90-9e57-af8eb1d27170');
         m.done();
       });
@@ -359,36 +359,36 @@ describe('Device', function() {
       var m = nock('https://trips.vin.li/')
         .get('/api/v1/devices/c4627b29-14bd-49c3-8e6a-1f857143039f/trips?offset=0&limit=2')
         .reply(200, {
-          'trips': [{
-            'id': 'cf9173fa-bbca-49bb-8297-a1a18586a8e7',
-            'start': '2014-12-30T08:50:48.669Z',
-            'stop': '2014-12-30T14:57:46.225Z',
-            'status': 'complete',
-            'vehicleId': '530f2690-63c0-11e4-86d8-7f2f26e5461e',
-            'deviceId': 'c4627b29-14bd-49c3-8e6a-1f857143039f'
-          },{
-            'id': '4cb2a8ea-64a5-49b9-bdb2-e60106f61f84',
-            'start': '2014-12-29T13:35:52.184Z',
-            'stop': '2014-12-29T13:58:32.270Z',
-            'status': 'complete',
-            'vehicleId': '530f2690-63c0-11e4-86d8-7f2f26e5461e',
-            'deviceId': 'c4627b29-14bd-49c3-8e6a-1f857143039f'
+          trips: [{
+            id: 'cf9173fa-bbca-49bb-8297-a1a18586a8e7',
+            start: '2014-12-30T08:50:48.669Z',
+            stop: '2014-12-30T14:57:46.225Z',
+            status: 'complete',
+            vehicleId: '530f2690-63c0-11e4-86d8-7f2f26e5461e',
+            deviceId: 'c4627b29-14bd-49c3-8e6a-1f857143039f'
+          }, {
+            id: '4cb2a8ea-64a5-49b9-bdb2-e60106f61f84',
+            start: '2014-12-29T13:35:52.184Z',
+            stop: '2014-12-29T13:58:32.270Z',
+            status: 'complete',
+            vehicleId: '530f2690-63c0-11e4-86d8-7f2f26e5461e',
+            deviceId: 'c4627b29-14bd-49c3-8e6a-1f857143039f'
           }],
-            'meta': {
-            'pagination': {
-              'total': 748,
-              'limit': 2,
-              'offset': 0,
-              'links': {
-                'first': 'http://trips-test.vin.li/api/v1/devices/c4627b29-14bd-49c3-8e6a-1f857143039f/trips?offset=0&limit=2',
-                'last': 'http://trips-test.vin.li/api/v1/devices/c4627b29-14bd-49c3-8e6a-1f857143039f/trips?offset=746&limit=2',
-                'next': 'http://trips-test.vin.li/api/v1/devices/c4627b29-14bd-49c3-8e6a-1f857143039f/trips?offset=2&limit=2'
+            meta: {
+            pagination: {
+              total: 748,
+              limit: 2,
+              offset: 0,
+              links: {
+                first: 'http://trips-test.vin.li/api/v1/devices/c4627b29-14bd-49c3-8e6a-1f857143039f/trips?offset=0&limit=2',
+                last: 'http://trips-test.vin.li/api/v1/devices/c4627b29-14bd-49c3-8e6a-1f857143039f/trips?offset=746&limit=2',
+                next: 'http://trips-test.vin.li/api/v1/devices/c4627b29-14bd-49c3-8e6a-1f857143039f/trips?offset=2&limit=2'
               }
             }
           }
         });
 
-      return Vinli.Device.forge('c4627b29-14bd-49c3-8e6a-1f857143039f').trips({limit: 2}).then(function(trips){
+      return Vinli.Device.forge('c4627b29-14bd-49c3-8e6a-1f857143039f').trips({ limit: 2 }).then(function(trips) {
         expect(trips).to.have.property('list').that.is.an('array');
         expect(trips.list).to.have.lengthOf(2);
         expect(trips.list[0]).to.be.instanceOf(Vinli.Trip);

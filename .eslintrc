@@ -1,6 +1,3 @@
-# Vinli Node.js ESLint config
-# See https://github.com/vinli/dot-files/blob/master/node/.eslintrc
-# find . -path ./node_modules -prune -o -name "*.js" -o -name "*.jsx" -exec eslint {} \;
 env:
   browser: false
   node: true
@@ -88,7 +85,6 @@ rules:
   no-trailing-spaces: 2
   no-undef: 2
   no-undef-init: 2
-  no-undefined: 2
   no-underscore-dangle: 2
   no-unreachable: 2
   no-unused-expressions: 2
