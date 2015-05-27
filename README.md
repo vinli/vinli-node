@@ -16,12 +16,23 @@ npm install --save vinli
 Create a new application from the Vinli Developer Portal (https://dev.vin.li).  From within your Node.js application, set up the client:
 
 ```javascript
-var Vinli = require('vinli')({
+var Vinli = require('vinli')
+
+var client = new Vinli({
   appId: 'b3fcb3c2-0b7e-4c9a-a6a1-f53e365c2fd9',
   secretKey: 'C023z8T6f39WSZrLSqqf'
 });
 ```
 
+When creating a client, you must pass either a `appId` and `secretKey` or `accessToken`.
+
+```javascript
+var Vinli = require('vinli')
+
+var client = new Vinli({
+  accessToken: 'HWaBnDis9eZcHTMYQpKsE0mfsQT3qgKMRnpaVrivQ9GmhlXtLuE1'
+});
+```
 
 Objects
 -------
@@ -29,9 +40,10 @@ Objects
 - [App](#app)
 - [Device](#device)
 - [Vehicle](#vehicle)
-- [Trip](#trip)
 - [Rule](#rule)
-- [EmergencyContact](#emergencycontact)
+- [Event](#event)
+- [Subscription](#subscription)
+- [Trip](#trip)
 
 
 Conventions
@@ -117,7 +129,7 @@ Auth
 
 ### `exchange(authCode, redirectUrl, clientId, clientSecret)`
 
-For server applications that use the OAuth client type of "server", this method is used to exchange a user's OAuth token.  This method returns a token that the server can use to make calls to Auth Services on behalf of the user.  This token is only needed for calls to Auth.
+For server applications that use the OAuth client type of "server", this method is used to exchange a user's OAuth token.  This method returns a token that the server can use to make calls to Auth Services on behalf of the user.
 
 
 User
@@ -198,12 +210,6 @@ Accepts `limit`, `since`, and `until` stream pagination options.  Without any op
 Retrieves a part of the stream of locations transmitted by this Device. Accepts `limit`, `since`, and `until` stream pagination options.  Without any options, this method will return the most recent locations.
 
 
-### Device's Trips
-
-#### `trips([options])`
-
-Retrieves a list of Trips for the Device.  This method returns Trips in reverse chronological order and accepts `limit` and `offset` pagination options.
-
 
 ### Device's Rules
 
@@ -216,21 +222,20 @@ Retrieves a list of Rules for the Device.  Accepts `limit` and `offset` paginati
 
 Creates a Rule for this device.
 
+
+### Device's Trips
+
+#### `trips([options])`
+
+Retrieves a list of Trips for the Device.  This method returns Trips in reverse chronological order and accepts `limit` and `offset` pagination options.
+
+
 ### Device's Safety Services
 
 #### `collisions([options])`
 
 Retrieves a list of Collisions for the Device.  Accepts `limit` and `offset` pagination options.
 
-
-#### `emergencyContacts([options])`
-
-Retrieves a list of EmergencyContacts for the Device.  Accepts `limit` and `offset` pagination options.
-
-
-#### `createEmergencyContact(emergencyContact)`
-
-Creates an EmergencyContact for the Device.  EmergencyContacts can be one of two types: `sms` and `voice`.  The type of the contact determines the connection made and the available fields.
 
 
 Vehicle
@@ -245,6 +250,74 @@ Creates a Vehicle object with the given `id`.
 Retrieves the Vehicle from the Vinli Platform with the given `id`.
 
 #### `trips([options])`
+
+
+Event
+-----
+
+#### `Event.forge(id)`
+
+Creates a Event object with the given `id`.
+
+#### `Event.fetch(id)`
+
+Retrieves the Event from the Vinli Platform with the given `id`.
+
+
+Subscription
+------------
+
+#### `Subscription.forge(id)`
+
+Creates a Subscription object with the given `id`.
+
+#### `Subscription.fetch(id)`
+
+Retrieves the Subscription from the Vinli Platform with the given `id`.
+
+#### `notifications([options])`
+
+Retrieves the Notifications for this Subscription.  Accepts `limit` and `offset` pagination options.
+
+#### `delete()`
+
+Deletes this Subscription.
+
+
+Rule
+----
+
+#### `Rule.forge(id)`
+
+Creates a Rule object with the given `id`.
+
+#### `Rule.fetch(id)`
+
+Retrieves the Rule from the Vinli Platform with the given `id`.
+
+#### `Rule.fill(id)`
+
+Fills in information about the Rule.  This is useful in situations where a Rule was retrieved via Device.rules().  When retrieved this way, Rules do not contain boundary information.
+
+#### `events([options])`
+
+Retrieves the Events for this Rule.  Accepts `limit` and `offset` pagination options.
+
+#### `subscriptions([options])`
+
+Retrieves the Subscriptions for this Rule.  Accepts `limit` and `offset` pagination options.
+
+#### `createSubscription([options])`
+
+Creates a new Subscription for this Rule. The `options` parameter must have the following:
+
+* `eventType` - Can be 'rule-*', 'rule-enter', or 'rule-leave'
+* `url` - URL to call when the subscription is triggered
+* `appData` - Optional string containing additional data that will be delivered to the above URL
+
+#### `delete()`
+
+Deletes this Rule.
 
 
 Trip
@@ -275,50 +348,3 @@ Retrieves a part of the stream of locations transmitted by this Device. Accepts 
 Note: In order to retrieve the snapshot for a given Trip, the Trip object must have been created by the `fetch` method.
 
 Retrieves a part of the stream of snapshots transmitted by this Device. Accepts `limit`, `since`, and `until` stream pagination options.  Without any options, this method will return the most recent snapshots.
-
-
-Rule
-----
-
-#### `Rule.forge(id)`
-
-Creates a Rule object with the given `id`.
-
-#### `Rule.fetch(id)`
-
-Retrieves the Rule from the Vinli Platform with the given `id`.
-
-#### `events([options])`
-
-Retrieves the Events for this Rule.  Accepts `limit` and `offset` pagination options.
-
-#### `currentState([deviceId])`
-
-Retrieves the current state of a Rule.  If the Rule object was not created using the `fetch` method above, you must provide the `deviceId`.
-
-#### `delete()`
-
-Deletes this Rule.
-
-EmergencyContact
-----------------
-
-#### `EmergencyContact.forge(id)`
-
-Creates an EmergencyContact object with the given `id`.
-
-#### `EmergencyContact.fetch(id)`
-
-Retrieves the EmergencyContact from the Vinli Platform with the given `id`.
-
-#### `update(emergencyContact)`
-
-Updates the EmergencyContact with the information provided.
-
-#### `test()`
-
-Sends a test signal to the Vinli Platform to trigger the EmergencyContact.  The phone number for the contact will receive either a SMS or Voice Call as configured with the addition of "This is a test..." caveats.
-
-#### `delete()`
-
-Deletes this EmergencyContact.

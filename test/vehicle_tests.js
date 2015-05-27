@@ -5,7 +5,7 @@ var Vinli = require('..')({appId: 'foo', secretKey: 'bar'});
 
 describe('Vehicle', function(){
   before(function(){
-    Vinli = require('..')({appId: 'foo', secretKey: 'bar'});
+    Vinli = new (require('..'))({appId: 'foo', secretKey: 'bar' });
   });
 
   beforeEach(function(){

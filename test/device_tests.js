@@ -5,7 +5,7 @@ var Vinli = require('..')({appId: 'foo', secretKey: 'bar' });
 
 describe('Device', function() {
   before(function() {
-    Vinli = require('..')({appId: 'foo', secretKey: 'bar' });
+    Vinli = new (require('..'))({appId: 'foo', secretKey: 'bar' });
   });
 
   beforeEach(function() {
@@ -418,20 +418,6 @@ describe('Device', function() {
     it('should exist', function() {
       var device = Vinli.Device.forge('asfdafdasfdsdf');
       expect(device).to.have.property('collisions').that.is.a('function');
-    });
-  });
-
-  describe('#emergencyContacts()', function() {
-    it('should exist', function() {
-      var device = Vinli.Device.forge('asfdafdasfdsdf');
-      expect(device).to.have.property('emergencyContacts').that.is.a('function');
-    });
-  });
-
-  describe('#createEmergencyContact()', function() {
-    it('should exist', function() {
-      var device = Vinli.Device.forge('asfdafdasfdsdf');
-      expect(device).to.have.property('createEmergencyContact').that.is.a('function');
     });
   });
 });

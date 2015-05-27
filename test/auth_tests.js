@@ -9,7 +9,7 @@ var expect = chai.expect;
 
 describe('Auth', function() {
   before(function() {
-    Vinli = require('..')({ appId: 'foo', secretKey: 'bar' });
+    Vinli = new (require('..'))({appId: 'foo', secretKey: 'bar' });
   });
 
   beforeEach(function() {

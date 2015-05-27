@@ -9,7 +9,7 @@ var expect = chai.expect;
 
 describe('App', function() {
   before(function() {
-    Vinli = require('..')({ appId: 'foo', secretKey: 'bar' });
+    Vinli = new (require('..'))({appId: 'foo', secretKey: 'bar' });
   });
 
   beforeEach(function() {
@@ -66,7 +66,7 @@ describe('App', function() {
           }
         });
 
-      return Vinli.App.devices({limit: 2}).then(function(devices) {
+      return Vinli.App.devices({ limit: 2 }).then(function(devices) {
         expect(devices).to.have.property('list');
         expect(devices).to.have.property('total', 3);
         expect(devices).to.have.property('next').that.is.a('function');
@@ -74,7 +74,7 @@ describe('App', function() {
         expect(devices).to.have.property('last').that.is.a('function');
         m.done();
         return devices.next();
-      }).then(function(devices){
+      }).then(function(devices) {
         expect(devices).to.have.property('list');
         expect(devices).to.have.property('total', 3);
         expect(devices).to.have.property('prev').that.is.a('function');

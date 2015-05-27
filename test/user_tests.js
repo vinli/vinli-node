@@ -9,7 +9,7 @@ var expect = chai.expect;
 
 describe('User', function(){
   before(function(){
-    Vinli = require('..')({appId: 'foo', secretKey: 'bar'});
+    Vinli = new (require('..'))({appId: 'foo', secretKey: 'bar' });
   });
 
   beforeEach(function(){
@@ -93,7 +93,6 @@ describe('User', function(){
       return Vinli.User.fetch('fc8bdd0c-5be3-46d5-8582-b5b54052eca2').then(function(user){
         return user.devices();
       }).then(function(devices) {
-        console.log()
         expect(devices).to.have.property('list').that.is.an('array');
         expect(devices.list).to.have.lengthOf(1);
         expect(devices.list[0]).to.have.property('id', '54db7f75-209b-4aa1-b48d-e8ced66fdfe2');
