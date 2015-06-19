@@ -62,7 +62,7 @@ describe('Trip', function() {
     });
   });
 
-  xdescribe('#messages()', function() {
+  describe('#messages()', function() {
     it('should exist', function() {
       var trip = Vinli.Trip.forge('asfdafdasfdsdf');
       expect(trip).to.have.property('messages').that.is.a('function');
@@ -76,7 +76,7 @@ describe('Trip', function() {
     });
   });
 
-  xdescribe('#snapshots()', function() {
+  describe('#snapshots()', function() {
     it('should exist', function() {
       var trip = Vinli.Trip.forge('asfdafdasfdsdf');
       expect(trip).to.have.property('snapshots').that.is.a('function');
