@@ -89,6 +89,7 @@ describe('Client', function() {
           event: 'http://foo.vin.li',
           rule: 'http://foo.vin.li',
           trip: 'http://foo.vin.li',
+          diagnostic: 'http://foo.vin.li',
           safety: 'http://foo.vin.li'
         }
       }).Device.fetch('03afc858-23ff-4738-8eb2-4dec0e364205').then(function() {
@@ -107,6 +108,7 @@ describe('Client', function() {
       expect(vinli).to.have.property('Device');
       expect(vinli).to.have.property('Vehicle');
       expect(vinli).to.have.property('Trip');
+      expect(vinli).to.have.property('Code');
       expect(vinli).to.have.property('Rule');
       expect(vinli).to.have.property('Event');
       expect(vinli).to.have.property('Subscription');
