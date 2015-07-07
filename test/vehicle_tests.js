@@ -117,6 +117,147 @@ describe('Vehicle', function() {
     });
   });
 
+  describe('#codes()', function() {
+    it('should exist', function() {
+      var vehicle = Vinli.Vehicle.forge('fc8bdd0c-5be3-46d5-8582-b5b54052eca2');
+      expect(vehicle).to.have.property('codes').that.is.a('function');
+    });
+
+    it('should get a list of all diagnostic trouble codes', function() {
+      var m = nock('https://diagnostic.vin.li')
+        .get('/api/v1/vehicles/fc8bdd0c-5be3-46d5-8582-b5b54052eca2/codes?offset=0&limit=3')
+        .reply(200, {
+          meta: {
+            pagination: {
+              total: 4,
+              limit: 3,
+              offset: 0,
+              links: {
+                first: '/api/v1/vehicles/fec0bf34-eb4e-49e2-b17c-83e21ff5d03a/codes?limit=3&offset=0&sortDirection=desc',
+                next: '/api/v1/vehicles/fec0bf34-eb4e-49e2-b17c-83e21ff5d03a/codes?limit=3&offset=3&sortDirection=desc',
+                last: '/api/v1/vehicles/fec0bf34-eb4e-49e2-b17c-83e21ff5d03a/codes?limit=3&offset=3&sortDirection=desc'
+              }
+            }
+          },
+          codes: [{
+            id: '61400110-aec8-4ed7-a3cb-1e47ce8f9fe1',
+            codeId: 'P0100'
+          }, {
+            id: '9640294c-1fe5-4365-85a2-6b40378762b7',
+            codeId: 'P0101'
+          }, {
+            id: 'd3d01d86-47a2-4ef9-926c-f69517c58fb9',
+            codeId: 'P0102'
+          }]
+        });
+
+      return Vinli.Vehicle.forge('fc8bdd0c-5be3-46d5-8582-b5b54052eca2')
+        .codes({ limit: 3 })
+        .then(function(codes) {
+          expect(codes).to.have.property('list').that.is.an('array');
+          expect(codes.list).to.have.lengthOf(3);
+          expect(codes.list[0]).to.be.an.instanceOf(Vinli.Code);
+          expect(codes).to.have.property('total', 4);
+          expect(codes).to.have.property('next').that.is.a('function');
+          m.done();
+        });
+    });
+  });
+
+  describe('#activeCodes()', function() {
+    it('should exist', function() {
+      var vehicle = Vinli.Vehicle.forge('fc8bdd0c-5be3-46d5-8582-b5b54052eca2');
+      expect(vehicle).to.have.property('activeCodes').that.is.a('function');
+    });
+
+    it('should get a list of active diagnostic trouble codes', function() {
+      var m = nock('https://diagnostic.vin.li')
+        .get('/api/v1/vehicles/fc8bdd0c-5be3-46d5-8582-b5b54052eca2/codes?state=active&offset=0&limit=3')
+        .reply(200, {
+          meta: {
+            pagination: {
+              total: 4,
+              limit: 3,
+              offset: 0,
+              links: {
+                first: '/api/v1/vehicles/fec0bf34-eb4e-49e2-b17c-83e21ff5d03a/codes?limit=3&offset=0&sortDirection=desc',
+                next: '/api/v1/vehicles/fec0bf34-eb4e-49e2-b17c-83e21ff5d03a/codes?limit=3&offset=3&sortDirection=desc',
+                last: '/api/v1/vehicles/fec0bf34-eb4e-49e2-b17c-83e21ff5d03a/codes?limit=3&offset=3&sortDirection=desc'
+              }
+            }
+          },
+          codes: [{
+            id: '61400110-aec8-4ed7-a3cb-1e47ce8f9fe1',
+            codeId: 'P0100'
+          }, {
+            id: '9640294c-1fe5-4365-85a2-6b40378762b7',
+            codeId: 'P0101'
+          }, {
+            id: 'd3d01d86-47a2-4ef9-926c-f69517c58fb9',
+            codeId: 'P0102'
+          }]
+        });
+
+      return Vinli.Vehicle.forge('fc8bdd0c-5be3-46d5-8582-b5b54052eca2')
+        .activeCodes({ limit: 3 })
+        .then(function(codes) {
+          expect(codes).to.have.property('list').that.is.an('array');
+          expect(codes.list).to.have.lengthOf(3);
+          expect(codes.list[0]).to.be.an.instanceOf(Vinli.Code);
+          expect(codes).to.have.property('total', 4);
+          expect(codes).to.have.property('next').that.is.a('function');
+          m.done();
+        });
+    });
+  });
+
+  describe('#inactiveCodes()', function() {
+    it('should exist', function() {
+      var vehicle = Vinli.Vehicle.forge('fc8bdd0c-5be3-46d5-8582-b5b54052eca2');
+      expect(vehicle).to.have.property('inactiveCodes').that.is.a('function');
+    });
+
+    it('should get a list of inactive diagnostic trouble codes', function() {
+      var m = nock('https://diagnostic.vin.li')
+        .get('/api/v1/vehicles/fc8bdd0c-5be3-46d5-8582-b5b54052eca2/codes?state=inactive&offset=0&limit=3')
+        .reply(200, {
+          meta: {
+            pagination: {
+              total: 4,
+              limit: 3,
+              offset: 0,
+              links: {
+                first: '/api/v1/vehicles/fec0bf34-eb4e-49e2-b17c-83e21ff5d03a/codes?limit=3&offset=0&sortDirection=desc',
+                next: '/api/v1/vehicles/fec0bf34-eb4e-49e2-b17c-83e21ff5d03a/codes?limit=3&offset=3&sortDirection=desc',
+                last: '/api/v1/vehicles/fec0bf34-eb4e-49e2-b17c-83e21ff5d03a/codes?limit=3&offset=3&sortDirection=desc'
+              }
+            }
+          },
+          codes: [{
+            id: '61400110-aec8-4ed7-a3cb-1e47ce8f9fe1',
+            codeId: 'P0100'
+          }, {
+            id: '9640294c-1fe5-4365-85a2-6b40378762b7',
+            codeId: 'P0101'
+          }, {
+            id: 'd3d01d86-47a2-4ef9-926c-f69517c58fb9',
+            codeId: 'P0102'
+          }]
+        });
+
+      return Vinli.Vehicle.forge('fc8bdd0c-5be3-46d5-8582-b5b54052eca2')
+        .inactiveCodes({ limit: 3 })
+        .then(function(codes) {
+          expect(codes).to.have.property('list').that.is.an('array');
+          expect(codes.list).to.have.lengthOf(3);
+          expect(codes.list[0]).to.be.an.instanceOf(Vinli.Code);
+          expect(codes).to.have.property('total', 4);
+          expect(codes).to.have.property('next').that.is.a('function');
+          m.done();
+        });
+    });
+  });
+
   xdescribe('#collisions()', function() {
     it('should exist', function() {
       var device = Vinli.Vehicle.forge('asfdafdasfdsdf');
