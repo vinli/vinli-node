@@ -258,10 +258,57 @@ describe('Vehicle', function() {
     });
   });
 
-  xdescribe('#collisions()', function() {
+  describe('#collisions()', function() {
     it('should exist', function() {
-      var device = Vinli.Vehicle.forge('asfdafdasfdsdf');
-      expect(device).to.have.property('collisions').that.is.a('function');
+      var vehicle = Vinli.Vehicle.forge('asfdafdasfdsdf');
+      expect(vehicle).to.have.property('collisions').that.is.a('function');
+    });
+
+    it('should return a list of collisions for the devices', function() {
+      var m = nock('https://safety.vin.li')
+        .get('/api/v1/vehicles/c4627b29-14bd-49c3-8e6a-1f857143039f/collisions?offset=0&limit=2')
+        .reply(200, {
+          collisions: [{
+            id: '06782175-735e-4226-82bc-ebdf887c30f3',
+            timestamp: '2015-07-13T17:45:04.583Z',
+            location: {
+              type: 'Point',
+              coordinates: [ -96.917009, 32.766392 ]
+            },
+            links: { self: 'http://172.17.0.114:3000/api/v1/collisions/06782175-735e-4226-82bc-ebdf887c30f3' }
+          }, {
+            id: '5b2bf92c-a2c5-4365-9f9b-3d51b8883ad6',
+            timestamp: '2015-07-13T17:46:04.583Z',
+            location: {
+              type: 'Point',
+              coordinates: [ -96.917009, 32.766392 ]
+            },
+            links: { self: 'http://172.17.0.114:3000/api/v1/collisions/5b2bf92c-a2c5-4365-9f9b-3d51b8883ad6' }
+          }],
+          meta: {
+            pagination: {
+              total: 3,
+              limit: 2,
+              offset: 0,
+              links: {
+                first: 'http://172.17.0.114:3000/api/v1/devices/c4627b29-14bd-49c3-8e6a-1f857143039f/collisions?offset=0&limit=2',
+                last: 'http://172.17.0.114:3000/api/v1/devices/c4627b29-14bd-49c3-8e6a-1f857143039f/collisions?offset=0&limit=2',
+                next: 'http://172.17.0.114:3000/api/v1/devices/c4627b29-14bd-49c3-8e6a-1f857143039f/collisions?offset=2&limit=2'
+              }
+            }
+          }
+        });
+
+      return Vinli.Vehicle.forge('c4627b29-14bd-49c3-8e6a-1f857143039f').collisions({ limit: 2 })
+        .then(function(collisions) {
+          expect(collisions).to.have.property('list').that.is.an('array');
+          expect(collisions.list).to.have.lengthOf(2);
+          expect(collisions.list[0]).to.be.instanceOf(Vinli.Collision);
+          expect(collisions).to.have.property('total', 3);
+          expect(collisions).to.have.property('next').that.is.a('function');
+
+          m.done();
+        });
     });
   });
 });
