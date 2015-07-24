@@ -73,8 +73,8 @@ describe('Vehicle', function() {
     });
 
     it('should return a list of trips for the device', function() {
-      var m = nock('https://trips.vin.li/')
-        .get('/api/v1/vehicles/530f2690-63c0-11e4-86d8-7f2f26e5461e/trips?offset=0&limit=2')
+      var m = nock('https://trips.vin.li')
+        .get('/api/v1/vehicles/530f2690-63c0-11e4-86d8-7f2f26e5461e/trips?limit=2')
         .reply(200, {
           trips: [{
             id: 'cf9173fa-bbca-49bb-8297-a1a18586a8e7',
@@ -93,13 +93,13 @@ describe('Vehicle', function() {
           }],
             meta: {
             pagination: {
-              total: 748,
+              remaining: 746,
+              until: '2015-07-24T22:11:23.829Z',
+              since: '1970-01-01T00:00:00.000Z',
               limit: 2,
-              offset: 0,
+              sortDir: 'desc',
               links: {
-                first: 'http://trips-test.vin.li/api/v1/devices/c4627b29-14bd-49c3-8e6a-1f857143039f/trips?offset=0&limit=2',
-                last: 'http://trips-test.vin.li/api/v1/devices/c4627b29-14bd-49c3-8e6a-1f857143039f/trips?offset=746&limit=2',
-                next: 'http://trips-test.vin.li/api/v1/devices/c4627b29-14bd-49c3-8e6a-1f857143039f/trips?offset=2&limit=2'
+                prior: 'https://trips.vin.li/api/v1/vehicles/530f2690-63c0-11e4-86d8-7f2f26e5461e/trips?limit=2&until=1437778166267'
               }
             }
           }
@@ -109,8 +109,7 @@ describe('Vehicle', function() {
         expect(trips).to.have.property('list').that.is.an('array');
         expect(trips.list).to.have.lengthOf(2);
         expect(trips.list[0]).to.be.instanceOf(Vinli.Trip);
-        expect(trips).to.have.property('total', 748);
-        expect(trips).to.have.property('next').that.is.a('function');
+        expect(trips).to.have.property('prior').that.is.a('function');
 
         m.done();
       });
@@ -125,17 +124,17 @@ describe('Vehicle', function() {
 
     it('should get a list of all diagnostic trouble codes', function() {
       var m = nock('https://diagnostic.vin.li')
-        .get('/api/v1/vehicles/fc8bdd0c-5be3-46d5-8582-b5b54052eca2/codes?offset=0&limit=3')
+        .get('/api/v1/vehicles/fc8bdd0c-5be3-46d5-8582-b5b54052eca2/codes?limit=3')
         .reply(200, {
           meta: {
             pagination: {
-              total: 4,
+              remaining: 1,
+              until: '2015-07-24T22:11:23.829Z',
+              since: '1970-01-01T00:00:00.000Z',
               limit: 3,
-              offset: 0,
+              sortDir: 'desc',
               links: {
-                first: '/api/v1/vehicles/fec0bf34-eb4e-49e2-b17c-83e21ff5d03a/codes?limit=3&offset=0&sortDirection=desc',
-                next: '/api/v1/vehicles/fec0bf34-eb4e-49e2-b17c-83e21ff5d03a/codes?limit=3&offset=3&sortDirection=desc',
-                last: '/api/v1/vehicles/fec0bf34-eb4e-49e2-b17c-83e21ff5d03a/codes?limit=3&offset=3&sortDirection=desc'
+                prior: 'https://diagnostic.vin.li/api/v1/vehicles/fc8bdd0c-5be3-46d5-8582-b5b54052eca2/codes?limit=3&until=1437778166267'
               }
             }
           },
@@ -157,8 +156,7 @@ describe('Vehicle', function() {
           expect(codes).to.have.property('list').that.is.an('array');
           expect(codes.list).to.have.lengthOf(3);
           expect(codes.list[0]).to.be.an.instanceOf(Vinli.Code);
-          expect(codes).to.have.property('total', 4);
-          expect(codes).to.have.property('next').that.is.a('function');
+          expect(codes).to.have.property('prior').that.is.a('function');
           m.done();
         });
     });
@@ -172,17 +170,17 @@ describe('Vehicle', function() {
 
     it('should get a list of active diagnostic trouble codes', function() {
       var m = nock('https://diagnostic.vin.li')
-        .get('/api/v1/vehicles/fc8bdd0c-5be3-46d5-8582-b5b54052eca2/codes?state=active&offset=0&limit=3')
+        .get('/api/v1/vehicles/fc8bdd0c-5be3-46d5-8582-b5b54052eca2/codes?state=active&limit=3')
         .reply(200, {
           meta: {
             pagination: {
-              total: 4,
+              remaining: 1,
+              until: '2015-07-24T22:11:23.829Z',
+              since: '1970-01-01T00:00:00.000Z',
               limit: 3,
-              offset: 0,
+              sortDir: 'desc',
               links: {
-                first: '/api/v1/vehicles/fec0bf34-eb4e-49e2-b17c-83e21ff5d03a/codes?limit=3&offset=0&sortDirection=desc',
-                next: '/api/v1/vehicles/fec0bf34-eb4e-49e2-b17c-83e21ff5d03a/codes?limit=3&offset=3&sortDirection=desc',
-                last: '/api/v1/vehicles/fec0bf34-eb4e-49e2-b17c-83e21ff5d03a/codes?limit=3&offset=3&sortDirection=desc'
+                prior: 'https://diagnostic.vin.li/api/v1/vehicles/fc8bdd0c-5be3-46d5-8582-b5b54052eca2/codes?state=active&limit=3&until=1437778166267'
               }
             }
           },
@@ -204,8 +202,7 @@ describe('Vehicle', function() {
           expect(codes).to.have.property('list').that.is.an('array');
           expect(codes.list).to.have.lengthOf(3);
           expect(codes.list[0]).to.be.an.instanceOf(Vinli.Code);
-          expect(codes).to.have.property('total', 4);
-          expect(codes).to.have.property('next').that.is.a('function');
+          expect(codes).to.have.property('prior').that.is.a('function');
           m.done();
         });
     });
@@ -219,17 +216,17 @@ describe('Vehicle', function() {
 
     it('should get a list of inactive diagnostic trouble codes', function() {
       var m = nock('https://diagnostic.vin.li')
-        .get('/api/v1/vehicles/fc8bdd0c-5be3-46d5-8582-b5b54052eca2/codes?state=inactive&offset=0&limit=3')
+        .get('/api/v1/vehicles/fc8bdd0c-5be3-46d5-8582-b5b54052eca2/codes?state=inactive&limit=3')
         .reply(200, {
           meta: {
             pagination: {
-              total: 4,
+              remaining: 1,
+              until: '2015-07-24T22:11:23.829Z',
+              since: '1970-01-01T00:00:00.000Z',
               limit: 3,
-              offset: 0,
+              sortDir: 'desc',
               links: {
-                first: '/api/v1/vehicles/fec0bf34-eb4e-49e2-b17c-83e21ff5d03a/codes?limit=3&offset=0&sortDirection=desc',
-                next: '/api/v1/vehicles/fec0bf34-eb4e-49e2-b17c-83e21ff5d03a/codes?limit=3&offset=3&sortDirection=desc',
-                last: '/api/v1/vehicles/fec0bf34-eb4e-49e2-b17c-83e21ff5d03a/codes?limit=3&offset=3&sortDirection=desc'
+                prior: 'https://diagnostic.vin.li/api/v1/vehicles/fc8bdd0c-5be3-46d5-8582-b5b54052eca2/codes?state=inactivelimit=3&until=1437778166267'
               }
             }
           },
@@ -251,8 +248,7 @@ describe('Vehicle', function() {
           expect(codes).to.have.property('list').that.is.an('array');
           expect(codes.list).to.have.lengthOf(3);
           expect(codes.list[0]).to.be.an.instanceOf(Vinli.Code);
-          expect(codes).to.have.property('total', 4);
-          expect(codes).to.have.property('next').that.is.a('function');
+          expect(codes).to.have.property('prior').that.is.a('function');
           m.done();
         });
     });
@@ -266,7 +262,7 @@ describe('Vehicle', function() {
 
     it('should return a list of collisions for the devices', function() {
       var m = nock('https://safety.vin.li')
-        .get('/api/v1/vehicles/c4627b29-14bd-49c3-8e6a-1f857143039f/collisions?offset=0&limit=2')
+        .get('/api/v1/vehicles/c4627b29-14bd-49c3-8e6a-1f857143039f/collisions?limit=2')
         .reply(200, {
           collisions: [{
             id: '06782175-735e-4226-82bc-ebdf887c30f3',
@@ -275,7 +271,7 @@ describe('Vehicle', function() {
               type: 'Point',
               coordinates: [ -96.917009, 32.766392 ]
             },
-            links: { self: 'http://172.17.0.114:3000/api/v1/collisions/06782175-735e-4226-82bc-ebdf887c30f3' }
+            links: { self: 'https://safety.vin.li/api/v1/collisions/06782175-735e-4226-82bc-ebdf887c30f3' }
           }, {
             id: '5b2bf92c-a2c5-4365-9f9b-3d51b8883ad6',
             timestamp: '2015-07-13T17:46:04.583Z',
@@ -283,17 +279,17 @@ describe('Vehicle', function() {
               type: 'Point',
               coordinates: [ -96.917009, 32.766392 ]
             },
-            links: { self: 'http://172.17.0.114:3000/api/v1/collisions/5b2bf92c-a2c5-4365-9f9b-3d51b8883ad6' }
+            links: { self: 'https://safety.vin.li/api/v1/collisions/5b2bf92c-a2c5-4365-9f9b-3d51b8883ad6' }
           }],
           meta: {
             pagination: {
-              total: 3,
+              remaining: 1,
+              until: '2015-07-24T22:11:23.829Z',
+              since: '1970-01-01T00:00:00.000Z',
               limit: 2,
-              offset: 0,
+              sortDir: 'desc',
               links: {
-                first: 'http://172.17.0.114:3000/api/v1/devices/c4627b29-14bd-49c3-8e6a-1f857143039f/collisions?offset=0&limit=2',
-                last: 'http://172.17.0.114:3000/api/v1/devices/c4627b29-14bd-49c3-8e6a-1f857143039f/collisions?offset=0&limit=2',
-                next: 'http://172.17.0.114:3000/api/v1/devices/c4627b29-14bd-49c3-8e6a-1f857143039f/collisions?offset=2&limit=2'
+                prior: 'https://safety.vin.li/api/v1/vehicles/c4627b29-14bd-49c3-8e6a-1f857143039f/collisions?limit=2&until=1437778166267'
               }
             }
           }
@@ -304,8 +300,7 @@ describe('Vehicle', function() {
           expect(collisions).to.have.property('list').that.is.an('array');
           expect(collisions.list).to.have.lengthOf(2);
           expect(collisions.list[0]).to.be.instanceOf(Vinli.Collision);
-          expect(collisions).to.have.property('total', 3);
-          expect(collisions).to.have.property('next').that.is.a('function');
+          expect(collisions).to.have.property('prior').that.is.a('function');
 
           m.done();
         });

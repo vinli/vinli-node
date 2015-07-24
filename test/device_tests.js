@@ -422,7 +422,7 @@ describe('Device', function() {
 
     it('should return a list of collisions for the devices', function() {
       var m = nock('https://safety.vin.li')
-        .get('/api/v1/devices/c4627b29-14bd-49c3-8e6a-1f857143039f/collisions?offset=0&limit=2')
+        .get('/api/v1/devices/c4627b29-14bd-49c3-8e6a-1f857143039f/collisions?limit=2')
         .reply(200, {
           collisions: [{
             id: '06782175-735e-4226-82bc-ebdf887c30f3',
@@ -443,13 +443,13 @@ describe('Device', function() {
           }],
           meta: {
             pagination: {
-              total: 3,
+              remaining: 0,
+              until: '2015-07-24T22:11:23.829Z',
+              since: '1970-01-01T00:00:00.000Z',
               limit: 2,
-              offset: 0,
+              sortDir: 'desc',
               links: {
-                first: 'http://172.17.0.114:3000/api/v1/devices/c4627b29-14bd-49c3-8e6a-1f857143039f/collisions?offset=0&limit=2',
-                last: 'http://172.17.0.114:3000/api/v1/devices/c4627b29-14bd-49c3-8e6a-1f857143039f/collisions?offset=0&limit=2',
-                next: 'http://172.17.0.114:3000/api/v1/devices/c4627b29-14bd-49c3-8e6a-1f857143039f/collisions?offset=2&limit=2'
+                prior: 'https://safety.vin.li/api/v1/devices/c4627b29-14bd-49c3-8e6a-1f857143039f/collisions?limit=2&until=1437778166267'
               }
             }
           }
@@ -460,8 +460,7 @@ describe('Device', function() {
           expect(collisions).to.have.property('list').that.is.an('array');
           expect(collisions.list).to.have.lengthOf(2);
           expect(collisions.list[0]).to.be.instanceOf(Vinli.Collision);
-          expect(collisions).to.have.property('total', 3);
-          expect(collisions).to.have.property('next').that.is.a('function');
+          expect(collisions).to.have.property('prior').that.is.a('function');
 
           m.done();
         });
