@@ -357,7 +357,7 @@ describe('Device', function() {
 
     it('should return a list of trips for the device', function() {
       var m = nock('https://trips.vin.li/')
-        .get('/api/v1/devices/c4627b29-14bd-49c3-8e6a-1f857143039f/trips?offset=0&limit=2')
+        .get('/api/v1/devices/c4627b29-14bd-49c3-8e6a-1f857143039f/trips?limit=2')
         .reply(200, {
           trips: [{
             id: 'cf9173fa-bbca-49bb-8297-a1a18586a8e7',
@@ -380,9 +380,9 @@ describe('Device', function() {
               limit: 2,
               offset: 0,
               links: {
-                first: 'http://trips-test.vin.li/api/v1/devices/c4627b29-14bd-49c3-8e6a-1f857143039f/trips?offset=0&limit=2',
-                last: 'http://trips-test.vin.li/api/v1/devices/c4627b29-14bd-49c3-8e6a-1f857143039f/trips?offset=746&limit=2',
-                next: 'http://trips-test.vin.li/api/v1/devices/c4627b29-14bd-49c3-8e6a-1f857143039f/trips?offset=2&limit=2'
+                first: 'http://trips-test.vin.li/api/v1/devices/c4627b29-14bd-49c3-8e6a-1f857143039f/trips?limit=2',
+                last: 'http://trips-test.vin.li/api/v1/devices/c4627b29-14bd-49c3-8e6a-1f857143039f/trips?limit=2',
+                next: 'http://trips-test.vin.li/api/v1/devices/c4627b29-14bd-49c3-8e6a-1f857143039f/trips?limit=2'
               }
             }
           }
