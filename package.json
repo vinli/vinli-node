@@ -1,6 +1,6 @@
 {
   "name": "vinli",
-  "version": "1.4.1",
+  "version": "2.0.0",
   "description": "Official Node.js SDK for interacting with the Vinli Platform",
   "main": "index.js",
   "repository": {
