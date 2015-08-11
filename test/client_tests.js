@@ -90,7 +90,8 @@ describe('Client', function() {
           rule: 'http://foo.vin.li',
           trip: 'http://foo.vin.li',
           diagnostic: 'http://foo.vin.li',
-          safety: 'http://foo.vin.li'
+          safety: 'http://foo.vin.li',
+          behavioral: 'http://foo.vin.li'
         }
       }).Device.fetch('03afc858-23ff-4738-8eb2-4dec0e364205').then(function() {
         device.done();
