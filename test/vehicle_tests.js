@@ -72,7 +72,7 @@ describe('Vehicle', function() {
       expect(device).to.have.property('trips').that.is.a('function');
     });
 
-    it('should return a list of trips for the device', function() {
+    it('should return a list of trips for the vehicle', function() {
       var m = nock('https://trips.vin.li')
         .get('/api/v1/vehicles/530f2690-63c0-11e4-86d8-7f2f26e5461e/trips?limit=2')
         .reply(200, {
@@ -93,7 +93,7 @@ describe('Vehicle', function() {
           }],
             meta: {
             pagination: {
-              remaining: 746,
+              remaining: 0,
               until: '2015-07-24T22:11:23.829Z',
               since: '1970-01-01T00:00:00.000Z',
               limit: 2,
@@ -110,6 +110,71 @@ describe('Vehicle', function() {
         expect(trips.list).to.have.lengthOf(2);
         expect(trips.list[0]).to.be.instanceOf(Vinli.Trip);
         expect(trips).to.have.property('prior').that.is.a('function');
+
+        m.done();
+      });
+    });
+  });
+
+  describe('#reportCards()', function() {
+    it('should exist', function() {
+      var device = Vinli.Device.forge('asfdafdasfdsdf');
+      expect(device).to.have.property('reportCards').that.is.a('function');
+    });
+
+    it('should return a list of report cards for the vehicle', function() {
+      var m = nock('https://behavioral.vin.li')
+        .get('/api/v1/vehicles/ca10cd7a-d2a5-4bb3-b47b-2aa0b8848f55/report_cards?limit=2')
+        .reply(200, {
+          reportCards: [
+          {
+            id: '1eeda86c-0ae2-48e3-b589-792e2a1b0508',
+            deviceId: '64013359-093a-4ed1-bd5f-cb47deaea262',
+            vehicleId: 'ca10cd7a-d2a5-4bb3-b47b-2aa0b8848f55',
+            tripId: 'eb8ef0f8-e90a-4b85-bd8b-b8323c5bcd58',
+            grade: 'A',
+            links: {
+              self: 'https://behavioral-dev.vin.li/api/v1/report_cards/1eeda86c-0ae2-48e3-b589-792e2a1b0508',
+              trip: 'https://trips-dev.vin.li/api/v1/trips/eb8ef0f8-e90a-4b85-bd8b-b8323c5bcd58',
+              device: 'https://platform-dev.vin.li/api/v1/devices/64013359-093a-4ed1-bd5f-cb47deaea262',
+              vehicle: 'https://platform-dev.vin.li/api/v1/vehicles/ca10cd7a-d2a5-4bb3-b47b-2aa0b8848f55'
+            }
+          },
+          {
+            id: '8d313cd0-1d40-4a82-9a9a-dcec71704e35',
+            deviceId: '64013359-093a-4ed1-bd5f-cb47deaea262',
+            vehicleId: 'ca10cd7a-d2a5-4bb3-b47b-2aa0b8848f55',
+            tripId: '81c10254-e643-4a4a-93ee-f6ce3c1cdb84',
+            grade: 'A',
+            links: {
+              self: 'https://behavioral-dev.vin.li/api/v1/report_cards/8d313cd0-1d40-4a82-9a9a-dcec71704e35',
+              trip: 'https://trips-dev.vin.li/api/v1/trips/81c10254-e643-4a4a-93ee-f6ce3c1cdb84',
+              device: 'https://platform-dev.vin.li/api/v1/devices/64013359-093a-4ed1-bd5f-cb47deaea262',
+              vehicle: 'https://platform-dev.vin.li/api/v1/vehicles/ca10cd7a-d2a5-4bb3-b47b-2aa0b8848f55'
+            }
+          }
+         ],
+          meta: {
+            pagination: {
+              remaining: 0,
+              until: '2015-08-11T22:42:36.591Z',
+              since: '1970-01-01T00:00:00.000Z',
+              limit: 2,
+              sortDir: 'desc',
+              links: {
+                first: 'http://behavioral.vin.li/api/v1/devices/64013359-093a-4ed1-bd5f-cb47deaea262/report_cards?limit=2',
+                last: 'http://behavioral.vin.li/api/v1/devices/64013359-093a-4ed1-bd5f-cb47deaea262/report_cards?limit=2',
+                next: 'http://behavioral.vin.li/api/v1/devices/64013359-093a-4ed1-bd5f-cb47deaea262/report_cards?limit=2'
+              }
+            }
+          }
+        });
+
+      return Vinli.Vehicle.forge('ca10cd7a-d2a5-4bb3-b47b-2aa0b8848f55').reportCards({ limit: 2 }).then(function(reportCards) {
+        expect(reportCards).to.have.property('list').that.is.an('array');
+        expect(reportCards.list).to.have.lengthOf(2);
+        expect(reportCards.list[0]).to.be.instanceOf(Vinli.ReportCard);
+        expect(reportCards).to.have.property('next').that.is.a('function');
 
         m.done();
       });
