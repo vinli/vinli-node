@@ -66,10 +66,10 @@ describe('Client', function() {
     });
 
     it('should let you set the apiVersion', function() {
-      var devices = nock('https://platform.vin.li').get('/api/v3/devices/03afc858-23ff-4738-8eb2-4dec0e364205')
+      var devices = nock('https://platform.vin.li').get('/api/v1/devices/03afc858-23ff-4738-8eb2-4dec0e364205')
         .reply(200, { devices: [], meta: emptyMeta });
 
-      return new Client({ appId: 'foo', secretKey: 'bar', apiVersion: 'v3' })
+      return new Client({ appId: 'foo', secretKey: 'bar', apiVersion: 'v1' })
         .Device.fetch('03afc858-23ff-4738-8eb2-4dec0e364205').then(function() {
           devices.done();
         });
