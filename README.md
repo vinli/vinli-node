@@ -118,6 +118,9 @@ Adds a device to your application, giving your application access to that device
 
 Note that, with the exception of enterprise applications, the user must have granted access to the device through the MyVinli OAuth flow.
 
+#### `removeDevice(deviceId)`
+
+Removes the device associated with the given `deviceId` from your application.
 
 #### `devices(options)`
 

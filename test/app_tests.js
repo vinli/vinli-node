@@ -138,4 +138,26 @@ describe('App', function() {
       }).to.throw(/id, caseId/);
     });
   });
+
+  describe('.removeDevice()', function() {
+    it('should exist', function() {
+      expect(Vinli.App).to.have.property('removeDevice').that.is.a('function');
+    });
+
+    it('should let you remove a device by device id', function() {
+      var m = nock('https://platform.vin.li')
+      .delete('/api/v1/devices/foo')
+      .reply(204);
+
+      return Vinli.App.removeDevice('foo').then(function() {
+        m.done();
+      });
+    });
+
+    it('should not let you remove a device without device id', function() {
+      expect(function() {
+        Vinli.App.removeDevice();
+      }).to.throw(/required/);
+    });
+  });
 });
