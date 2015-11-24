@@ -134,7 +134,7 @@ describe('App', function() {
 
     it('should not let you add a device without device id or case id', function() {
       expect(function() {
-        Vinli.App.addDevice({ id: 'foo', caseId: 'VNL999' });
+        Vinli.App.addDevice({});
       }).to.throw(/id, caseId/);
     });
   });
