@@ -226,6 +226,21 @@ Retrieves a list of Rules for the Device.  Accepts `limit` and `offset` paginati
 Creates a Rule for this device.
 
 
+### Device's Subscriptions
+
+#### `subscriptions([options])`
+
+Retrieves a list of Subscriptions for the Device.  Accepts `limit` and `offset` pagination options.
+
+
+#### `createSubscription(subscription)`
+
+Creates a Subscription for this device. The `options` parameter must have the following:
+
+* `eventType` - A valid [event type](http://docs.vin.li/en/latest/web/event-services/overview.html#event-types).
+* `url` - URL to call when the subscription is triggered
+
+
 ### Device's Trips
 
 #### `trips([options])`
