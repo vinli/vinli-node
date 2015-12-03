@@ -77,6 +77,53 @@ describe('Rule', function() {
     });
   });
 
+  describe('#createSubscription()', function() {
+    it('should exist', function() {
+      var rule = Vinli.Rule.forge('asfdafdasfdsdf');
+      expect(rule).to.have.property('createSubscription').that.is.a('function');
+    });
+
+    it('should return a Subscription object', function() {
+      var sub = {
+        deviceId: '9d5c90b9-c6c7-4544-96b0-f3eb88ca6937',
+        eventType: 'startup',
+        url: 'http://127.0.0.1/'
+      };
+
+      var m = nock('https://events.vin.li')
+        .post('/api/v1/devices/9d5c90b9-c6c7-4544-96b0-f3eb88ca6937/subscriptions', {
+          subscription: sub
+        }).reply(201, {
+          subscription: {
+            id: 'a9f58fc2-67b3-4625-aa4f-e93ab5d183f1',
+            deviceId: '9d5c90b9-c6c7-4544-96b0-f3eb88ca6937',
+            eventType: 'startup',
+            url: 'http://127.0.0.1/',
+            createdAt: '2015-12-02T16:02:37.315Z',
+            updatedAt: '2015-12-02T16:02:37.315Z',
+            links: {
+              self: 'https://events.vin.li/api/v1/subscriptions/9d5c90b9-c6c7-4544-96b0-f3eb88ca6937',
+              notifications: 'https://events.vin.li/api/v1/subscriptions/9d5c90b9-c6c7-4544-96b0-f3eb88ca6937/notifications'
+            }
+          }
+        });
+
+      return Vinli.Rule.forge('9d5c90b9-c6c7-4544-96b0-f3eb88ca6937').createSubscription(sub)
+        .then(function(subscription) {
+          expect(subscription).to.be.an.instanceOf(Vinli.Subscription);
+          expect(subscription).to.have.property('id').that.is.a('string');
+          expect(subscription).to.have.property('deviceId', '9d5c90b9-c6c7-4544-96b0-f3eb88ca6937');
+          expect(subscription).to.have.property('eventType', 'startup');
+          expect(subscription).to.have.property('url', 'http://127.0.0.1/');
+          expect(subscription).to.have.property('createdAt').that.is.a('string');
+          expect(subscription).to.have.property('updatedAt').that.is.a('string');
+          expect(subscription).to.have.property('links').that.is.an('object');
+
+          m.done();
+        });
+    });
+  });
+
   xdescribe('#events()', function() {
     it('should exist', function() {
       var rule = Vinli.Rule.forge('fc8bdd0c-5be3-46d5-8582-b5b54052eca2');
