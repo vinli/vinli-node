@@ -481,6 +481,52 @@ describe('Device', function() {
     });
   });
 
+  describe('#createSubscription()', function() {
+    it('should exist', function() {
+      var device = Vinli.Device.forge('asfdafdasfdsdf');
+      expect(device).to.have.property('createSubscription').that.is.a('function');
+    });
+
+    it('should return a Subscription object', function() {
+      var sub = {
+        eventType: 'startup',
+        url: 'http://127.0.0.1/'
+      };
+
+      var m = nock('https://events.vin.li')
+        .post('/api/v1/devices/78809613-7d24-40d6-a76b-a4bc8af3a181/subscriptions', {
+          subscription: sub
+        }).reply(201, {
+          subscription: {
+            id: 'f5726b65-cc57-4f19-aec5-8abd77bbb814',
+            deviceId: '78809613-7d24-40d6-a76b-a4bc8af3a181',
+            eventType: 'startup',
+            url: 'http://127.0.0.1/',
+            createdAt: '2015-12-02T16:02:37.315Z',
+            updatedAt: '2015-12-02T16:02:37.315Z',
+            links: {
+              self: 'https://events.vin.li/api/v1/subscriptions/78809613-7d24-40d6-a76b-a4bc8af3a181',
+              notifications: 'https://events.vin.li/api/v1/subscriptions/78809613-7d24-40d6-a76b-a4bc8af3a181/notifications'
+            }
+          }
+        });
+
+      return Vinli.Device.forge('78809613-7d24-40d6-a76b-a4bc8af3a181').createSubscription(sub)
+        .then(function(subscription) {
+          expect(subscription).to.be.an.instanceOf(Vinli.Subscription);
+          expect(subscription).to.have.property('id').that.is.a('string');
+          expect(subscription).to.have.property('deviceId', '78809613-7d24-40d6-a76b-a4bc8af3a181');
+          expect(subscription).to.have.property('eventType', 'startup');
+          expect(subscription).to.have.property('url', 'http://127.0.0.1/');
+          expect(subscription).to.have.property('createdAt').that.is.a('string');
+          expect(subscription).to.have.property('updatedAt').that.is.a('string');
+          expect(subscription).to.have.property('links').that.is.an('object');
+
+          m.done();
+        });
+    });
+  });
+
   describe('#subscriptions()', function() {
     it('should exist', function() {
       var device = Vinli.Device.forge('asfdafdasfdsdf');
