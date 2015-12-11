@@ -335,18 +335,74 @@ describe('Device', function() {
     });
   });
 
-  xdescribe('#snapshots()', function() {
+  describe('#snapshots()', function() {
     it('should exist', function() {
       var device = Vinli.Device.forge('asfdafdasfdsdf');
       expect(device).to.have.property('snapshots').that.is.a('function');
     });
   });
 
-  xdescribe('#locations()', function() {
+  describe('#locations()', function() {
     it('should exist', function() {
       var device = Vinli.Device.forge('asfdafdasfdsdf');
       expect(device).to.have.property('locations').that.is.a('function');
     });
+
+    it('should include fields in the request', function() {
+      var m = nock('https://telemetry.vin.li')
+        .get('/api/v1/devices/c4627b29-14bd-49c3-8e6a-1f857143039f/locations?limit=54&fields=vehicleSpeed%2Crpm')
+        .reply(200, {
+          locations: {
+            type: 'FeatureCollection',
+            features: [
+              {
+                type: 'Feature',
+                geometry: {
+                  type: 'Point',
+                  coordinates: [ -90.0811, 29.9508 ]
+                },
+                properties: {
+                  timestamp: '2014-03-13T17:54:20.050Z',
+                  rpm: 1264,
+                  vehicleSpeed: 54
+                }
+              },
+              {
+                type: 'Feature',
+                geometry: {
+                  type: 'Point',
+                  coordinates: [ -90.08198, 29.9498 ]
+                },
+                properties: {
+                  timestamp: '2014-03-13T17:54:07.122Z',
+                  rpm: 1832
+                }
+              }
+            ]
+          },
+          meta: {
+            pagination: {
+              remaining: 2341,
+              limit: 200,
+              until: 1394733260050,
+              links: {
+                prior: 'https://telemetry.vin.li/api/v1/devices/c4627b29-14bd-49c3-8e6a-1f857143039f/locations?limit=54&fields=vehicleSpeed,rpm&until=1394733247121'
+              }
+            }
+          }
+        });
+
+      return Vinli.Device.forge('c4627b29-14bd-49c3-8e6a-1f857143039f')
+        .locations({ fields: [ 'vehicleSpeed', 'rpm' ], limit: 54 })
+        .then(function(locations) {
+          expect(locations).to.have.property('list').that.is.an('object');
+          expect(locations.list).to.have.property('features').that.is.an('array');
+          expect(locations.list.features[0]).to.have.property('properties').that.is.an('object');
+          expect(locations.list.features[0].properties).to.have.property('rpm');
+          expect(locations.list.features[0].properties).to.have.property('vehicleSpeed');
+          m.done();
+        });
+    })
   });
 
   describe('#trips()', function() {
