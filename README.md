@@ -4,6 +4,8 @@ Vinli Node.js SDK
 [![npm version](https://badge.fury.io/js/vinli.svg)](http://badge.fury.io/js/vinli)
 [![Build Status](https://travis-ci.org/vinli/vinli-node.svg)](https://travis-ci.org/vinli/vinli-node)
 
+[![NPM](https://nodei.co/npm/vinli.png?downloads=true)](https://nodei.co/npm/vinli/)
+
 
 > This SDK and accompanying documentation is a work in progress. There are areas that are still to be completed and finalized. We welcome your feedback. Please post any errors as issues on GitHub and Vinli engineering will respond as quickly as possible. And stay tuned for updates over the next few weeks as we bring more features to the SDK.
 
