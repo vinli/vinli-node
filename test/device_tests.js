@@ -644,6 +644,59 @@ describe('Device', function() {
           m.done();
         });
     });
+
+    it('should return a list of subscriptions for the devices with timeseries pagination', function() {
+      var m = nock('https://events.vin.li')
+        .get('/api/v1/devices/c92fa3e1-3837-4def-aa11-fabf9f00440e/subscriptions?limit=2')
+        .reply(200, {
+          subscriptions: [{
+            id: '7037d4f3-a8fb-4f97-a67c-beaad99cb2ad',
+            deviceId: 'c92fa3e1-3837-4def-aa11-fabf9f00440e',
+            eventType: 'dtc-on',
+            url: 'http://127.0.0.1/',
+            object: null,
+            appData: null,
+            createdAt: '2015-12-01T16:02:37.315Z',
+            updatedAt: '2015-12-01T16:02:37.315Z',
+            links: {
+              self: 'https://events.vin.li/api/v1/subscriptions/7037d4f3-a8fb-4f97-a67c-beaad99cb2ad',
+              notifications: 'https://events.vin.li/api/v1/subscriptions/7037d4f3-a8fb-4f97-a67c-beaad99cb2ad/notifications'
+            }
+          }, {
+            id: 'b1578800-d8f2-44e8-9a6a-9cd037b08b6d',
+            deviceId: 'c92fa3e1-3837-4def-aa11-fabf9f00440e',
+            eventType: 'dtc-off',
+            url: 'http://127.0.0.1/',
+            object: null,
+            appData: null,
+            createdAt: '2015-12-01T16:02:37.315Z',
+            updatedAt: '2015-12-01T16:02:37.315Z',
+            links: {
+              self: 'https://events.vin.li/api/v1/subscriptions/b1578800-d8f2-44e8-9a6a-9cd037b08b6d',
+              notifications: 'https://events.vin.li/api/v1/subscriptions/b1578800-d8f2-44e8-9a6a-9cd037b08b6d/notifications'
+            }
+          }],
+          meta: {
+            pagination: {
+              remaining: 2,
+              limit: 2,
+              links: {
+                prior: 'https://events.vin.li/api/v1/devices/c92fa3e1-3837-4def-aa11-fabf9f00440e/subscriptions?offset=0&limit=20'
+              }
+            }
+          }
+        });
+
+      return Vinli.Device.forge('c92fa3e1-3837-4def-aa11-fabf9f00440e').subscriptions({ limit: 2 })
+        .then(function(subscriptions) {
+          expect(subscriptions).to.have.property('list').that.is.an('array');
+          expect(subscriptions.list).to.have.lengthOf(2);
+          expect(subscriptions.list[0]).to.be.instanceOf(Vinli.Subscription);
+          expect(subscriptions).to.have.property('total', 2);
+
+          m.done();
+        });
+    });
   });
 
   describe('#collisions()', function() {
