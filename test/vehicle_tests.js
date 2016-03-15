@@ -596,7 +596,7 @@ describe('Vehicle', function() {
           ]
         });
 
-      return Vinli.Vehicle.forge('78809613-7d24-40d6-a76b-a4bc8af3a181').distances({ unit: 'mi' })
+      return Vinli.Vehicle.forge('78809613-7d24-40d6-a76b-a4bc8af3a181').distances()
         .then(function(distances) {
           expect(distances).to.be.an('array').that.has.length(2);
           expect(distances[0]).to.be.an('object');

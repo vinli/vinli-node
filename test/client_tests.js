@@ -91,7 +91,8 @@ describe('Client', function() {
           trip: 'http://foo.vin.li',
           diagnostic: 'http://foo.vin.li',
           safety: 'http://foo.vin.li',
-          behavioral: 'http://foo.vin.li'
+          behavioral: 'http://foo.vin.li',
+          distance: 'http://foo.vin.li'
         }
       }).Device.fetch('03afc858-23ff-4738-8eb2-4dec0e364205').then(function() {
         device.done();
@@ -113,6 +114,8 @@ describe('Client', function() {
       expect(vinli).to.have.property('Rule');
       expect(vinli).to.have.property('Event');
       expect(vinli).to.have.property('Subscription');
+      expect(vinli).to.have.property('Odometer');
+      expect(vinli).to.have.property('OdometerTrigger');
     });
   });
 });
