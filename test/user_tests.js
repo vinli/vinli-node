@@ -38,7 +38,7 @@ describe('User', function() {
 
     it('should fetch an user with the given token from the platform', function() {
       var m = nock('https://auth.vin.li')
-        .get('/api/v1/users/_current')
+        .get('/api/v1/users/_current?access_token=fc8bdd0c-5be3-46d5-8582-b5b54052eca2')
         .reply(200, {
           user: {
             firstName: 'John',
@@ -72,7 +72,7 @@ describe('User', function() {
 
     it('should fetch an user with the given token from the platform', function() {
       var m = nock('https://auth.vin.li')
-        .get('/api/v1/users/_current')
+        .get('/api/v1/users/_current?access_token=fc8bdd0c-5be3-46d5-8582-b5b54052eca2')
         .reply(200, {
           user: {
             firstName: 'John',
