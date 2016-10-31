@@ -134,7 +134,7 @@ Auth
 
 #### `exchange(authCode, redirectUrl, clientId, clientSecret)`
 
-For server applications that use the OAuth client type of "server", this method is used to exchange a user's OAuth token.  This method returns a token that the server can use to make calls to Auth Services on behalf of the user.
+For server applications that use the OAuth client type of "server", this method is used to exchange a user's OAuth token.  This method returns a token that the server can use to make calls to Auth Services on behalf of the user. The authCode provided to this method must be obtained using the same clientId used to exchange to token.
 
 
 User
@@ -159,8 +159,7 @@ Fetches the user associated with the `authToken`. User information includes:
 
 ### `devices()`
 
-Gets an array of devices that the user has associated with their account and has authorized for this application.
-
+Gets an array of devices that the user has associated with their account and has authorized for this application. This method requires the User object to be forged beforehand.
 
 Device
 ------
