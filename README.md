@@ -46,6 +46,7 @@ Objects
 - [Event](#event)
 - [Subscription](#subscription)
 - [Trip](#trip)
+- [Code (diagnostics)](#code)
 
 
 Conventions
@@ -367,3 +368,15 @@ Retrieves a part of the stream of locations transmitted by this Device. Accepts 
 Note: In order to retrieve the snapshot for a given Trip, the Trip object must have been created by the `fetch` method.
 
 Retrieves a part of the stream of snapshots transmitted by this Device. Accepts `limit`, `since`, and `until` stream pagination options.  Without any options, this method will return the most recent snapshots.
+
+Code
+----
+
+#### `Code.fetch(id)`
+
+Retrieves the DTC occurrence information from the Vinli Platform with the given `id`.
+
+#### `Code.search(number, [options])`
+
+This method is meant to provide this information for a given DTC code (number) so that your Application can present useful information to the end-user.
+Accepts `limit` and `offset` pagination options.
