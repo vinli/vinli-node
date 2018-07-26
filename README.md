@@ -74,7 +74,7 @@ Most of the types listed below have two methods to create instances: `.fetch(id)
 * `forge(id)` - allows you to skip the fetch when you don't need this information.  For instance, if you know the id of a Device, but want to get all of that device's trips.  Calling
 
 	```javascript
-	Vinli.Device.fetch('a8774ce8-9892-46bb-99ce-d26a861291f1').then(function(device){
+	client.Device.fetch('a8774ce8-9892-46bb-99ce-d26a861291f1').then(function(device){
 	  return device.trips();
 	}).then(function(trips){
 	  // do something with `trips`
@@ -84,7 +84,7 @@ Most of the types listed below have two methods to create instances: `.fetch(id)
 	will retrieve information about the Device from the platform, then call the Trips server to get the device's trips.  The first call is unnecessary and will count as a transaction against your application.  Instead, using `forge` will skip the first API call and will instead create an "empty" Device:
 
 	```javascript
-	Vinli.Device.forge('a8774ce8-9892-46bb-99ce-d26a861291f1').trips().then(function(trips){
+	client.Device.forge('a8774ce8-9892-46bb-99ce-d26a861291f1').trips().then(function(trips){
 	  // do something with `trips`
 	});
 	```
@@ -95,17 +95,17 @@ It's important to understand two things about using `forge`:
 2. The object returned from `forge` has no properties besides the `id` that was set.
 
 	```javascript
-	var vehicle = Vinli.Vehicle.forge('1002fdd0-6b4e-450e-8b14-fa457b499db7');
+	var vehicle = client.Vehicle.forge('1002fdd0-6b4e-450e-8b14-fa457b499db7');
 	console.log(vehicle.id); // => '1002fdd0-6b4e-450e-8b14-fa457b499db7'
 	console.log(vehicle.vin); // => undefined
 	```
 vs.
 
-	```javascript
-	Vinli.Vehicle.fetch('1002fdd0-6b4e-450e-8b14-fa457b499db7').then(function(vehicle){
-	  console.log(vehicle.id); // => '1002fdd0-6b4e-450e-8b14-fa457b499db7'
-	  console.log(vehicle.vin); // => 'JHMBA6122HC361229'
-	})
+```javascript
+client.Vehicle.fetch('1002fdd0-6b4e-450e-8b14-fa457b499db7').then(function(vehicle){
+	console.log(vehicle.id); // => '1002fdd0-6b4e-450e-8b14-fa457b499db7'
+	console.log(vehicle.vin); // => 'JHMBA6122HC361229'
+})
 	```
 
 
@@ -205,7 +205,7 @@ Retrieves a single message for the given ID.  The message must have been generat
 
 Retrieves a part of the stream of snapshots transmitted by this Device that contain the given fields. `fields` is an array of parameters keys.  For a list of available parameters, check [https://dev.vin.li/parameters.json](https://dev.vin.li/parameters.json).  For example:
 
-    Vinli.Device.forge('ba355b36-67db-4224-af29-c13c738d14e3').snapshots(['vehicleSpeed', 'rpm', 'coolantTemp'])
+    client.Device.forge('ba355b36-67db-4224-af29-c13c738d14e3').snapshots(['vehicleSpeed', 'rpm', 'coolantTemp'])
 
 Accepts `limit`, `since`, and `until` stream pagination options.  Without any options, this method will return the most recent snapshots containing the given fields.
 
