@@ -106,7 +106,7 @@ client.Vehicle.fetch('1002fdd0-6b4e-450e-8b14-fa457b499db7').then(function(vehic
 	console.log(vehicle.id); // => '1002fdd0-6b4e-450e-8b14-fa457b499db7'
 	console.log(vehicle.vin); // => 'JHMBA6122HC361229'
 })
-	```
+```
 
 
 App
