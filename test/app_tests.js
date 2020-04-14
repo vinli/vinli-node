@@ -27,7 +27,7 @@ describe('App', function() {
 
     it('should return a "next page" function', function() {
       var m = nock('https://platform.vin.li')
-        .get('/api/v1/devices?offset=0&limit=2').reply('200', {
+        .get('/api/v1/devices?offset=0&limit=2').reply(200, {
           devices: [{
             id: '2248fff4-34fd-469c-9be7-8a1b5b13b4c7'
           }, {
@@ -48,7 +48,7 @@ describe('App', function() {
         });
 
       var n = nock('https://platform.vin.li')
-        .get('/api/v1/devices?offset=2&limit=2').reply('200', {
+        .get('/api/v1/devices?offset=2&limit=2').reply(200, {
           devices: [{
             id: '629cec1a-486f-4cc7-a437-e45314c62410'
           }],
@@ -75,6 +75,8 @@ describe('App', function() {
         m.done();
         return devices.next();
       }).then(function(devices) {
+
+        console.log('here');
         expect(devices).to.have.property('list');
         expect(devices).to.have.property('total', 3);
         expect(devices).to.have.property('prev').that.is.a('function');
@@ -96,7 +98,7 @@ describe('App', function() {
           device: {
             id: 'foo'
           }
-        }).reply('201', {
+        }).reply(201, {
           device: {
             id: 'foo'
           }
@@ -114,7 +116,7 @@ describe('App', function() {
           device: {
             caseId: 'VNL999'
           }
-        }).reply('201', {
+        }).reply(201, {
           device: {
             id: 'foo'
           }

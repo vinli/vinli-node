@@ -12,26 +12,25 @@
     "coverage": "istanbul cover node_modules/.bin/_mocha -- --recursive --reporter list",
     "lint": "eslint --quiet ."
   },
-  "author": "Powell Kinney",
+  "author": "Vinli Developers",
   "license": "MIT",
   "engines": {
-    "node": ">=6.0.0"
+    "node": ">=10.0.0"
   },
   "dependencies": {
-    "extend": "~2.0.0",
-    "hoek": "~4.2.1",
-    "joi": "^13.4.0",
-    "q": "~1.2.0",
-    "request": "~2.87.0",
-    "yarp": "^0.3.0"
+    "extend": "^3.0.2",
+    "@hapi/hoek": "^9.0.4",
+    "@hapi/joi": "^17.1.1",
+    "q": "^1.5.1",
+    "yarp": "^1.0.0"
   },
   "devDependencies": {
-    "chai": "~2.2.0",
-    "chai-as-promised": "~4.3.0",
-    "eslint": "^5.2.0",
-    "istanbul": "^0.4.5",
-    "mocha": "^5.2.0",
-    "nock": "^9.4.3"
+    "chai": "^4.2.0",
+    "chai-as-promised": "^7.1.1",
+    "eslint": "^6.8.0",
+    "nyc": "^15.0.1",
+    "mocha": "^7.1.1",
+    "nock": "^12.0.3"
   },
   "bugs": {
     "url": "https://github.com/vinli/vinli-node/issues"
