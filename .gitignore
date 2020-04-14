@@ -7,6 +7,7 @@ lib-cov
 *.pid
 *.gz
 *.scssc
+.nyc_output/*
 
 pids
 logs
